@@ -39,3 +39,10 @@
 
 # debug information files
 *.dwo
+
+a.out
+/bin/
+.vscode
+imgui.ini
+valgrind.txt
+note
