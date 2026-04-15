@@ -86,7 +86,7 @@ int	Application::setupBuffers()
 	glBindVertexArray(this->_VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, this->_VBO);
 
-	float	cube[] =
+	static const GLfloat	cube[] =
 	{
 	// Front face (z = 0.5)
 	-0.5f,-0.5f, 0.5f,
@@ -149,14 +149,9 @@ int	Application::setupBuffers()
 	// // First 3 floats are coordinates
 	glEnableVertexAttribArray(0);
 	// 6 * sizeof(float) because each vertex has 6 floats (3 for position, 3 for color)
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (const void*)0);
-
-	// // Second 3 floats are colors
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (const void*)(3*sizeof(float)));
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (const void*)0);
 
 	glBindVertexArray(0);
-
 	// compile shaders + link
 	GLuint vs = compileShader(GL_VERTEX_SHADER, vs_src);
 	GLuint fs = compileShader(GL_FRAGMENT_SHADER, fs_src);
