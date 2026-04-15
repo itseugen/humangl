@@ -1,6 +1,7 @@
 #pragma once
 
 #include "humangl.h"
+#include "mymath.hpp"
 
 struct Application
 {
@@ -10,11 +11,21 @@ struct Application
 	GLuint	_VBO = 0;
 	GLuint	_prog;
 
+	std::vector<Mat4>	_stack;
+
 	Application();
 	~Application();
 
 	void	initWindow();
 	int		setupBuffers();
+
+	void		push(const Mat4& mat);
+	Mat4	pop();
+
+	void	drawCube(const Mat4& mvp);
+
+	private:
+		GLuint	_mpvLoc;
 };
 
 GLuint compileShader(GLenum type, const char* src);

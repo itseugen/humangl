@@ -4,11 +4,8 @@ Application::Application()
 {
 	initWindow();
 	if(this->_win == nullptr) return;
-	// int w, h;
-	// this->_textureID = loadPPM("assets/unicorn.ppm", w, h);
-	// if (this->_textureID == 0)
-	// 	std::cerr << "Loading texture failed" << std::endl;
 	// setupImGui();
+	this->_mpvLoc = glGetUniformLocation(this->_prog, "uMVP");
 }
 
 Application::~Application()
@@ -52,11 +49,11 @@ void	Application::initWindow()
 	}
 	glfwMakeContextCurrent(win);
 
-	// 	if(!loadGLFunctions())
-	// {
-	// 	std::cerr<<"Failed loading GL functions\n";
-	// 	return;
-	// }
+		if(!loadGLFunctions())
+	{
+		std::cerr<<"Failed loading GL functions\n";
+		return;
+	}
 	this->_win = win;
 }
 
@@ -83,16 +80,74 @@ int	Application::setupBuffers()
 	glBindVertexArray(this->_VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, this->_VBO);
 
-	// // Allows GPU to access Vertex data (uploads it)
-	// glBufferData(GL_ARRAY_BUFFER, (ptrdiff_t)(this->_verts.size()*sizeof(Vertex)), this->_verts.data(), GL_STATIC_DRAW);
+	float	cube[] =
+	{
+	// Front face (z = 0.5)
+	-0.5f,-0.5f, 0.5f,
+	 0.5f,-0.5f, 0.5f,
+	 0.5f, 0.5f, 0.5f,
+
+	-0.5f,-0.5f, 0.5f,
+	 0.5f, 0.5f, 0.5f,
+	-0.5f, 0.5f, 0.5f,
+
+	// Back face (z = -0.5)
+	-0.5f,-0.5f,-0.5f,
+	 0.5f, 0.5f,-0.5f,
+	 0.5f,-0.5f,-0.5f,
+
+	-0.5f,-0.5f,-0.5f,
+	-0.5f, 0.5f,-0.5f,
+	 0.5f, 0.5f,-0.5f,
+
+	// Left face (x = -0.5)
+	-0.5f,-0.5f,-0.5f,
+	-0.5f,-0.5f, 0.5f,
+	-0.5f, 0.5f, 0.5f,
+
+	-0.5f,-0.5f,-0.5f,
+	-0.5f, 0.5f, 0.5f,
+	-0.5f, 0.5f,-0.5f,
+
+	// Right face (x = 0.5)
+	 0.5f,-0.5f,-0.5f,
+	 0.5f, 0.5f, 0.5f,
+	 0.5f,-0.5f, 0.5f,
+
+	 0.5f,-0.5f,-0.5f,
+	 0.5f, 0.5f,-0.5f,
+	 0.5f, 0.5f, 0.5f,
+
+	// Top face (y = 0.5)
+	-0.5f, 0.5f,-0.5f,
+	-0.5f, 0.5f, 0.5f,
+	 0.5f, 0.5f, 0.5f,
+
+	-0.5f, 0.5f,-0.5f,
+	 0.5f, 0.5f, 0.5f,
+	 0.5f, 0.5f,-0.5f,
+
+	// Bottom face (y = -0.5)
+	-0.5f,-0.5f,-0.5f,
+	 0.5f,-0.5f, 0.5f,
+	-0.5f,-0.5f, 0.5f,
+
+	-0.5f,-0.5f,-0.5f,
+	 0.5f,-0.5f,-0.5f,
+	 0.5f,-0.5f, 0.5f
+	};
+
+	// // Allows GPU to access the basic cube building block (uploads it)
+	glBufferData(GL_ARRAY_BUFFER, sizeof(cube), cube, GL_STATIC_DRAW);
 
 	// // First 3 floats are coordinates
-	// glEnableVertexAttribArray(0);
-	// glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)0);
+	glEnableVertexAttribArray(0);
+	// 6 * sizeof(float) because each vertex has 6 floats (3 for position, 3 for color)
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (const void*)0);
 
 	// // Second 3 floats are colors
-	// glEnableVertexAttribArray(1);
-	// glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)(3*sizeof(float)));
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (const void*)(3*sizeof(float)));
 
 	glBindVertexArray(0);
 
@@ -145,4 +200,28 @@ GLuint linkProgram(GLuint vs, GLuint fs)
 		return 0;
 	}
 	return p;
+}
+
+void	Application::push(const Mat4& mat)
+{
+	this->_stack.push_back(mat);
+}
+
+Mat4	Application::pop()
+{
+	if(this->_stack.empty())
+	{
+		throw std::runtime_error("Matrix stack underflow!");
+	}
+	Mat4 top = this->_stack.back();
+	this->_stack.pop_back();
+	return top;
+}
+
+void	Application::drawCube(const Mat4& mvp)
+{
+	glUseProgram(this->_prog);
+	glUniformMatrix4fv(this->_mpvLoc, 1, GL_FALSE, mvp.m);
+	glBindVertexArray(this->_VAO);
+	glDrawArrays(GL_TRIANGLES, 0, 36);
 }
