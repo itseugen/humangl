@@ -20,6 +20,7 @@
 // #include "mymath.hpp"
 #include "Application.hpp"
 #include "opengl.hpp"
+#include "mymath.hpp"
 
 // #include "imgui.h"
 // #include "imgui_impl_glfw.h"

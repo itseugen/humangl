@@ -3,7 +3,7 @@ CXXFLAGS = -std=c++17 -O2
 # -Iimgui -Iimgui/backend
 LIBS = -lglfw -lGL -ldl -lm -pthread
 
-SRCS = src/main.cpp src/Application.cpp src/opengl.cpp
+SRCS = src/main.cpp src/Application.cpp src/opengl.cpp src/mymath.cpp
 
 OBJS = $(SRCS:%.cpp=bin/%.o)
 
