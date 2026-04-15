@@ -1,5 +1,5 @@
 #pragma once
-#include "ft_scop.h"
+#include "humangl.h"
 
 // Vector for positions and directions
 struct Vec3
