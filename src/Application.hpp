@@ -11,6 +11,11 @@ struct Application
 	GLuint	_VBO = 0;
 	GLuint	_prog;
 
+	float	_tx = 0.0f;
+	float	_ty = 0.0f;
+	float	_tz = -2.5f;
+	float	_dt;
+
 	std::vector<Mat4>	_stack;
 
 	Application();
@@ -18,6 +23,8 @@ struct Application
 
 	void	initWindow();
 	int		setupBuffers();
+
+	void	keybinds();
 
 	void		push(const Mat4& mat);
 	Mat4	pop();

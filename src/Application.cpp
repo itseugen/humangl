@@ -225,3 +225,25 @@ void	Application::drawCube(const Mat4& mvp)
 	glBindVertexArray(this->_VAO);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 }
+
+/**
+ * @brief Setup all the keybinds to use
+ */
+void	Application::keybinds()
+{
+	if(glfwGetKey(this->_win, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+		glfwSetWindowShouldClose(this->_win,1);
+
+		if(glfwGetKey(this->_win, GLFW_KEY_A) == GLFW_PRESS)
+			this->_tx += 1.5f * this->_dt;
+		if(glfwGetKey(this->_win, GLFW_KEY_D) == GLFW_PRESS)
+			this->_tx -= 1.5f * this->_dt;
+		if(glfwGetKey(this->_win, GLFW_KEY_W) == GLFW_PRESS)
+			this->_tz += 1.5f * this->_dt;
+		if(glfwGetKey(this->_win, GLFW_KEY_S) == GLFW_PRESS)
+			this->_tz -= 1.5f * this->_dt;
+		if(glfwGetKey(this->_win, GLFW_KEY_SPACE) == GLFW_PRESS)
+			this->_ty -= 1.5f * this->_dt;
+		if(glfwGetKey(this->_win, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
+			this->_ty += 1.5f * this->_dt;
+}
