@@ -33,7 +33,7 @@ int main()
 		Mat4 model = mat4_mul( translate(app._tx, app._ty, app._tz), rotate_y(0.0f) );
 		Mat4 MVP = mat4_mul( mat4_mul(proj, view), model);
 
-		app.drawCube(MVP);
+		app.drawCube(MVP, Colour(0.8f, 0.2f, 0.3f));
 
 		// Display rendered stuff
 		glfwSwapBuffers(app._win);

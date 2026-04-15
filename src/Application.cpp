@@ -5,7 +5,9 @@ Application::Application()
 	initWindow();
 	if(this->_win == nullptr) return;
 	// setupImGui();
+	setupBuffers();
 	this->_mpvLoc = glGetUniformLocation(this->_prog, "uMVP");
+	this->_colLoc = glGetUniformLocation(this->_prog, "uColor");
 }
 
 Application::~Application()
@@ -222,10 +224,13 @@ Mat4	Application::pop()
 	return top;
 }
 
-void	Application::drawCube(const Mat4& mvp)
+void	Application::drawCube(const Mat4& mvp, const Colour& colour)
 {
 	glUseProgram(this->_prog);
 	glUniformMatrix4fv(this->_mpvLoc, 1, GL_FALSE, mvp.m);
+
+	glUniform3f(this->_colLoc, colour.r, colour.g, colour.b);
+
 	glBindVertexArray(this->_VAO);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 }

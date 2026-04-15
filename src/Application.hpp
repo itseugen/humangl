@@ -37,13 +37,14 @@ struct Application
 
 	void	keybinds();
 
-	void		push(const Mat4& mat);
+	void	push(const Mat4& mat);
 	Mat4	pop();
 
-	void	drawCube(const Mat4& mvp);
+	void	drawCube(const Mat4& mvp, const Colour& colour);
 
 	private:
 		GLuint	_mpvLoc;
+		GLint	_colLoc;
 };
 
 GLuint compileShader(GLenum type, const char* src);
