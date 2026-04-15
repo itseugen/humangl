@@ -62,12 +62,16 @@ int	Application::setupBuffers()
 	const char* vs_src;
 	const char* fs_src;
 
-			vs_src = R"(#version 330 core
+		vs_src = R"(#version 330 core
 		layout(location=0) in vec3 aPos;
-		layout(location=1) in vec3 aColor;
 		uniform mat4 uMVP;
+		uniform vec3 uColor;
 		out vec3 vColor;
-		void main(){ vColor = aColor; gl_Position = uMVP * vec4(aPos,1.0); }
+		void main()
+		{
+			vColor = uColor;
+			gl_Position = uMVP * vec4(aPos, 1.0);
+		}
 		)";
 		fs_src = R"(#version 330 core
 		in vec3 vColor; out vec4 FragColor;
