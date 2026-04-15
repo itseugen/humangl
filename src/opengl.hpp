@@ -36,6 +36,8 @@ typedef void	(*PFNGLTEXPARAMETERIPROC)(GLenum, GLenum, GLint);
 typedef void	(*PFNGLTEXIMAGE2DPROC)(GLenum, GLint, GLint, GLsizei, GLsizei, GLint, GLenum, GLenum, const void*);
 typedef void	(*PFNGLGENERATEMIPMAPPROC)(GLenum);
 
+typedef void	(*PFNGLUNIFORM3FPROC)(GLint, GLfloat, GLfloat, GLfloat);
+
 // function pointers
 extern PFNGLCREATESHADERPROC				glCreateShader_ptr;
 extern PFNGLSHADERSOURCEPROC				glShaderSource_ptr;
@@ -66,6 +68,8 @@ extern PFNGLBINDTEXTUREPROC					glBindTexture_ptr;
 extern PFNGLTEXPARAMETERIPROC				glTexParameteri_ptr;
 extern PFNGLTEXIMAGE2DPROC					glTexImage2D_ptr;
 extern PFNGLGENERATEMIPMAPPROC				glGenerateMipmap_ptr;
+
+extern PFNGLUNIFORM3FPROC					glUniform3f_ptr;
 
 // helper to load a symbol
 template<typename T>
@@ -110,3 +114,5 @@ bool loadGLFunctions();
 #define glTexParameteri glTexParameteri_ptr
 #define glTexImage2D glTexImage2D_ptr
 #define glGenerateMipmap glGenerateMipmap_ptr
+
+#define glUniform3f glUniform3f_ptr
