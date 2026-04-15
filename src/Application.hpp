@@ -3,6 +3,17 @@
 #include "humangl.h"
 #include "mymath.hpp"
 
+/**
+ * @brief Simply rgb colour
+ */
+struct Colour
+{
+	float	r, g, b;
+
+	Colour() : r(1.0f), g(1.0f), b(1.0f) {}
+	Colour(float red, float green, float blue): r(red), g(green), b(blue) {}
+};
+
 struct Application
 {
 	GLFWwindow*	_win = nullptr;
