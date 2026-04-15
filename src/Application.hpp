@@ -27,6 +27,17 @@ struct Application
 	float	_tz = -2.5f;
 	float	_dt;
 
+	// Mouse stuff
+	float	_yaw = -90.0f;
+	float	_pitch = 0.0f;
+	float	_lastMouseX = 640.0f;
+	float	_lastMouseY = 360.0f;
+	bool	_firstMouse = true;
+
+	Vec3 _cameraFront = {0, 0, -1};
+	Vec3 _cameraUp = {0, 1, 0};
+	Vec3 _cameraPosition = {0, 0.6f, 3.0f};
+
 	std::vector<Mat4>	_stack;
 
 	Application();
@@ -41,6 +52,8 @@ struct Application
 	Mat4	pop();
 
 	void	drawCube(const Mat4& mvp, const Colour& colour);
+
+	static void	mouseCallback(GLFWwindow* window, double xpos, double ypos);
 
 	private:
 		GLuint	_mpvLoc;

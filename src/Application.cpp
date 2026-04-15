@@ -42,7 +42,7 @@ void	Application::initWindow()
 	GLFWmonitor*	monitor = glfwGetPrimaryMonitor();
 	const GLFWvidmode* mode = glfwGetVideoMode(monitor);
 
-	GLFWwindow*	win = glfwCreateWindow(1280, 720, "HumanGL", nullptr, nullptr);
+	GLFWwindow*	win = glfwCreateWindow(1920, 1080, "HumanGL", nullptr, nullptr);
 	if(!win)
 	{
 		std::cerr << "Failed to create GLFW window" << std::endl;
@@ -56,6 +56,12 @@ void	Application::initWindow()
 		std::cerr<<"Failed loading GL functions\n";
 		return;
 	}
+
+	glfwSetInputMode(win, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	// glfwSetInputMode(win, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
+	glfwSetWindowUserPointer(win, this);
+	glfwSetCursorPosCallback(win, mouseCallback);
+
 	this->_win = win;
 }
 
@@ -238,16 +244,61 @@ void	Application::keybinds()
 	if(glfwGetKey(this->_win, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(this->_win,1);
 
-		if(glfwGetKey(this->_win, GLFW_KEY_A) == GLFW_PRESS)
-			this->_tx += 1.5f * this->_dt;
-		if(glfwGetKey(this->_win, GLFW_KEY_D) == GLFW_PRESS)
-			this->_tx -= 1.5f * this->_dt;
-		if(glfwGetKey(this->_win, GLFW_KEY_W) == GLFW_PRESS)
-			this->_tz += 1.5f * this->_dt;
-		if(glfwGetKey(this->_win, GLFW_KEY_S) == GLFW_PRESS)
-			this->_tz -= 1.5f * this->_dt;
-		if(glfwGetKey(this->_win, GLFW_KEY_SPACE) == GLFW_PRESS)
-			this->_ty -= 1.5f * this->_dt;
-		if(glfwGetKey(this->_win, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
-			this->_ty += 1.5f * this->_dt;
+
+	float	speed = 1.5f * this->_dt; // Adjust speed based on frame time
+	Vec3 right = norm(cross(this->_cameraFront, this->_cameraUp));
+	if (glfwGetKey(_win, GLFW_KEY_W) == GLFW_PRESS)
+		_cameraPosition += _cameraFront * speed;
+
+	if (glfwGetKey(_win, GLFW_KEY_S) == GLFW_PRESS)
+		_cameraPosition -= _cameraFront * speed;
+
+	if (glfwGetKey(_win, GLFW_KEY_A) == GLFW_PRESS)
+		_cameraPosition -= right * speed;
+
+	if (glfwGetKey(_win, GLFW_KEY_D) == GLFW_PRESS)
+		_cameraPosition += right * speed;
+
+	if (glfwGetKey(_win, GLFW_KEY_SPACE) == GLFW_PRESS)
+		_cameraPosition += _cameraUp * speed;
+
+	if (glfwGetKey(_win, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
+		_cameraPosition -= _cameraUp * speed;
+}
+
+void	Application::mouseCallback(GLFWwindow* window, double xpos, double ypos)
+{
+	Application* app = (Application*)glfwGetWindowUserPointer(window);
+	if(app->_firstMouse)
+	{
+		app->_lastMouseX = (float)xpos;
+		app->_lastMouseY = (float)ypos;
+		app->_firstMouse = false;
+	}
+
+	float xoffset = (float)xpos - app->_lastMouseX;
+	float yoffset = app->_lastMouseY - (float)ypos; // reversed since y-coordinates go from bottom to top
+
+	app->_lastMouseX = (float)xpos;
+	app->_lastMouseY = (float)ypos;
+
+	float sensitivity = 0.001f;
+	xoffset *= sensitivity;
+	yoffset *= sensitivity;
+
+	std::cout << "Yaw: " << app->_yaw << " Pitch: " << app->_pitch << "\n";
+	std::cout << "Camera Front: (" << app->_cameraFront.x << ", " << app->_cameraFront.y << ", " << app->_cameraFront.z << ")\n";
+	std::cout << "oxffset: (" << xoffset << ", " << yoffset << ")\n";
+	app->_yaw   += xoffset;
+	app->_pitch += yoffset;
+
+	if(app->_pitch > 89.0f) app->_pitch = 89.0f;
+	if(app->_pitch < -89.0f) app->_pitch = -89.0f;
+
+	//update the direction
+	Vec3 front;
+	front.x = cosf(app->_yaw * 3.14159265f / 180.0f) * cosf(app->_pitch * 3.14159265f / 180.0f);
+	front.y = sinf(app->_pitch * 3.14159265f / 180.0f);
+	front.z = sinf(app->_yaw * 3.14159265f / 180.0f) * cosf(app->_pitch * 3.14159265f / 180.0f);
+	app->_cameraFront = norm(front);
 }
