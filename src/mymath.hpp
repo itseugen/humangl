@@ -1,5 +1,11 @@
 #pragma once
-#include "humangl.h"
+
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <vector>
+#include <string>
+#include <cmath>
 
 // Vector for positions and directions
 struct Vec3
