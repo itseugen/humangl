@@ -30,6 +30,8 @@ PFNGLTEXPARAMETERIPROC				glTexParameteri_ptr = nullptr;
 PFNGLTEXIMAGE2DPROC					glTexImage2D_ptr = nullptr;
 PFNGLGENERATEMIPMAPPROC				glGenerateMipmap_ptr = nullptr;
 
+PFNGLUNIFORM3FPROC					glUniform3f_ptr = nullptr;
+
 bool loadGLFunctions()
 {
 	// load pointers we declared
@@ -62,5 +64,7 @@ bool loadGLFunctions()
 	if(!loadProc(glTexParameteri, "glTexParameteri")) return false;
 	if(!loadProc(glTexImage2D, "glTexImage2D")) return false;
 	if(!loadProc(glGenerateMipmap, "glGenerateMipmap")) return false;
+
+	if(!loadProc(glUniform3f, "glUniform3f")) return false;
 	return true;
 }
