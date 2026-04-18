@@ -57,10 +57,8 @@ void	Application::initWindow()
 		return;
 	}
 
-	glfwSetInputMode(win, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-	// glfwSetInputMode(win, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
 	glfwSetWindowUserPointer(win, this);
-	glfwSetCursorPosCallback(win, mouseCallback);
+	glfwSetKeyCallback(win, keyCallback);
 
 	this->_win = win;
 }
@@ -237,14 +235,10 @@ void	Application::drawCube(const Mat4& mvp, const Colour& colour)
 }
 
 /**
- * @brief Setup all the keybinds to use
+ * @brief Setup all the keybinds that could be used continuously (like holding down W to move forward)
  */
 void	Application::keybinds()
 {
-	if(glfwGetKey(this->_win, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-		glfwSetWindowShouldClose(this->_win,1);
-
-
 	float	speed = 1.5f * this->_dt; // Adjust speed based on frame time
 	Vec3 right = norm(cross(this->_cameraFront, this->_cameraUp));
 	if (glfwGetKey(_win, GLFW_KEY_W) == GLFW_PRESS)
@@ -269,36 +263,65 @@ void	Application::keybinds()
 void	Application::mouseCallback(GLFWwindow* window, double xpos, double ypos)
 {
 	Application* app = (Application*)glfwGetWindowUserPointer(window);
+	std::cout << "mpvLoc: " << app->_mpvLoc << " colLoc: " << app->_colLoc << std::endl;
 	if(app->_firstMouse)
 	{
 		app->_lastMouseX = (float)xpos;
 		app->_lastMouseY = (float)ypos;
 		app->_firstMouse = false;
+		return;
 	}
 
-	float xoffset = (float)xpos - app->_lastMouseX;
-	float yoffset = app->_lastMouseY - (float)ypos; // reversed since y-coordinates go from bottom to top
+	float sensitivity = 0.001f;
+	float deg2rad = 3.14159265f / 180.0f;
+
+	float xoffset = ((float)xpos - app->_lastMouseX) * sensitivity;
+	float yoffset = (app->_lastMouseY - (float)ypos) * sensitivity; // reversed since y-coordinates go from bottom to top
 
 	app->_lastMouseX = (float)xpos;
 	app->_lastMouseY = (float)ypos;
 
-	float sensitivity = 0.001f;
-	xoffset *= sensitivity;
-	yoffset *= sensitivity;
-
-	std::cout << "Yaw: " << app->_yaw << " Pitch: " << app->_pitch << "\n";
-	std::cout << "Camera Front: (" << app->_cameraFront.x << ", " << app->_cameraFront.y << ", " << app->_cameraFront.z << ")\n";
-	std::cout << "oxffset: (" << xoffset << ", " << yoffset << ")\n";
 	app->_yaw   += xoffset;
 	app->_pitch += yoffset;
 
 	if(app->_pitch > 89.0f) app->_pitch = 89.0f;
 	if(app->_pitch < -89.0f) app->_pitch = -89.0f;
 
-	//update the direction
+	float yawRad = app->_yaw * deg2rad;
+	float pitchRad = app->_pitch * deg2rad;
 	Vec3 front;
-	front.x = cosf(app->_yaw * 3.14159265f / 180.0f) * cosf(app->_pitch * 3.14159265f / 180.0f);
-	front.y = sinf(app->_pitch * 3.14159265f / 180.0f);
-	front.z = sinf(app->_yaw * 3.14159265f / 180.0f) * cosf(app->_pitch * 3.14159265f / 180.0f);
+	front.x = cosf(yawRad) * cosf(pitchRad);
+	front.y = sinf(pitchRad);
+	front.z = sinf(yawRad) * cosf(pitchRad);
 	app->_cameraFront = norm(front);
+}
+
+/// @brief The key callback function for GLFW, handles key presses and releases
+/// @param window 
+/// @param key 
+/// @param scancode 
+/// @param action 
+/// @param mods 
+void	Application::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+	Application* app = (Application*)glfwGetWindowUserPointer(window);
+	if(key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+		glfwSetWindowShouldClose(window,1);
+	if (key == GLFW_KEY_M && action == GLFW_PRESS)
+	{
+		if(app->_mouseActive == false)
+		{
+			glfwSetCursorPosCallback(app->_win, mouseCallback);
+			glfwSetInputMode(app->_win, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+			glfwSetCursorPos(app->_win, app->_winWidth / 2.0, app->_winHeight / 2.0);
+			app->_mouseActive = true;
+			app->_firstMouse = true;
+		}
+		else
+		{
+			glfwSetCursorPosCallback(app->_win, nullptr);
+			glfwSetInputMode(app->_win, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+			app->_mouseActive = false;
+		}
+	}
 }

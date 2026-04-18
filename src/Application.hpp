@@ -50,17 +50,19 @@ struct Application
 	int		setupBuffers();
 
 	void	keybinds();
-
+	
 	void	push(const Mat4& mat);
 	Mat4	pop();
-
+	
 	void	drawCube(const Mat4& mvp, const Colour& colour);
-
-	static void	mouseCallback(GLFWwindow* window, double xpos, double ypos);
-
+	
+	
 	private:
 		GLuint	_mpvLoc;
 		GLint	_colLoc;
+		bool	_mouseActive = false;
+		static void	keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+		static void	mouseCallback(GLFWwindow* window, double xpos, double ypos);
 };
 
 GLuint compileShader(GLenum type, const char* src);
