@@ -42,7 +42,7 @@ void	Application::initWindow()
 	GLFWmonitor*	monitor = glfwGetPrimaryMonitor();
 	const GLFWvidmode* mode = glfwGetVideoMode(monitor);
 
-	GLFWwindow*	win = glfwCreateWindow(1920, 1080, "HumanGL", nullptr, nullptr);
+	GLFWwindow*	win = glfwCreateWindow(this->_winWidth, this->_winHeight, "HumanGL", nullptr, nullptr);
 	if(!win)
 	{
 		std::cerr << "Failed to create GLFW window" << std::endl;

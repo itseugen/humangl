@@ -34,6 +34,9 @@ struct Application
 	float	_lastMouseY = 360.0f;
 	bool	_firstMouse = true;
 
+	int		_winHeight = 1080;
+	int		_winWidth = 1920;
+
 	Vec3 _cameraFront = {0, 0, -1};
 	Vec3 _cameraUp = {0, 1, 0};
 	Vec3 _cameraPosition = {0, 0.6f, 3.0f};
