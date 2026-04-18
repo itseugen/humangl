@@ -55,14 +55,16 @@ struct Application
 	Mat4	pop();
 	
 	void	drawCube(const Mat4& mvp, const Colour& colour);
-	
-	
+	Mat4	calcMVP();
+
 	private:
 		GLuint	_mpvLoc;
 		GLint	_colLoc;
 		bool	_mouseActive = false;
 		static void	keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 		static void	mouseCallback(GLFWwindow* window, double xpos, double ypos);
+		static constexpr float	DEG2RAD = 3.14159265f / 180.0f;
+		static constexpr float	DEG2RADFOV = 45.0f * DEG2RAD;
 };
 
 GLuint compileShader(GLenum type, const char* src);

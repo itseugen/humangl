@@ -263,7 +263,6 @@ void	Application::keybinds()
 void	Application::mouseCallback(GLFWwindow* window, double xpos, double ypos)
 {
 	Application* app = (Application*)glfwGetWindowUserPointer(window);
-	std::cout << "mpvLoc: " << app->_mpvLoc << " colLoc: " << app->_colLoc << std::endl;
 	if(app->_firstMouse)
 	{
 		app->_lastMouseX = (float)xpos;
@@ -324,4 +323,18 @@ void	Application::keyCallback(GLFWwindow* window, int key, int scancode, int act
 			app->_mouseActive = false;
 		}
 	}
+}
+
+/// @brief Standard MVP calculation (Replace DEG2RADFOV with DEG2RAD and the fov if it ever becomes a variable)
+/// @return The combined Model-View-Projection matrix
+Mat4	Application::calcMVP()
+{
+	Mat4	proj = perspective(DEG2RADFOV, (float)this->_winWidth/(float)this->_winHeight, 0.1f, 100.f);
+	Mat4	view = lookAt(
+		Vec3{this->_cameraPosition.x, this->_cameraPosition.y, this->_cameraPosition.z},
+		Vec3{this->_cameraPosition.x + this->_cameraFront.x, this->_cameraPosition.y + this->_cameraFront.y, this->_cameraPosition.z + this->_cameraFront.z},
+		this->_cameraUp
+	);
+	Mat4	model = mat4_mul(translate(this->_tx, this->_ty, this->_tz), rotate_y(0.0f));
+	return mat4_mul(mat4_mul(proj, view), model);
 }
