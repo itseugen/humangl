@@ -166,7 +166,6 @@ int	Application::setupBuffers()
 	}
 
 	this->_prog = linkProgram(vs, fs);
-	// Cleanup
 	glDeleteShader(vs);
 	glDeleteShader(fs);
 	return 0;
@@ -207,11 +206,15 @@ GLuint linkProgram(GLuint vs, GLuint fs)
 	return p;
 }
 
+/// @brief Addes a matrix to the top of the stack, used for hierarchical transformations (like a model matrix for an object, then pushing a child object with its own transform on top)
+/// @param mat the matrix to push onto the stack
 void	Application::push(const Mat4& mat)
 {
 	this->_stack.push_back(mat);
 }
 
+/// @brief Pops a matrix from the top of the stack
+/// @return The popped matrix
 Mat4	Application::pop()
 {
 	if(this->_stack.empty())
@@ -223,6 +226,9 @@ Mat4	Application::pop()
 	return top;
 }
 
+/// @brief Draws a 1x1x1 cube centered at the origin using the provided MVP matrix and colour
+/// @param mvp The combined Model-View-Projection matrix to transform the cube vertices
+/// @param colour The RGB colour to use for the cube
 void	Application::drawCube(const Mat4& mvp, const Colour& colour)
 {
 	glUseProgram(this->_prog);
@@ -260,6 +266,10 @@ void	Application::keybinds()
 		_cameraPosition -= _cameraUp * speed;
 }
 
+/// @brief THe mouse callback function for GLFW, handles mouse movement and updates the camera direction accordingly
+/// @param window 
+/// @param xpos 
+/// @param ypos 
 void	Application::mouseCallback(GLFWwindow* window, double xpos, double ypos)
 {
 	Application* app = (Application*)glfwGetWindowUserPointer(window);
