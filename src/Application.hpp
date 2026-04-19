@@ -65,6 +65,7 @@ struct Application
 		static void	mouseCallback(GLFWwindow* window, double xpos, double ypos);
 		static constexpr float	DEG2RAD = 3.14159265f / 180.0f;
 		static constexpr float	DEG2RADFOV = 45.0f * DEG2RAD;
+		void	updateCameraDirection();
 };
 
 GLuint compileShader(GLenum type, const char* src);

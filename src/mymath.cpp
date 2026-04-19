@@ -180,3 +180,7 @@ Vec3	Vec3::operator-=(const Vec3& other)
 	z -= other.z;
 	return *this;
 }
+
+Vec3::Vec3() {}
+
+Vec3::Vec3(float x_, float y_, float z_): x(x_), y(y_), z(z_) {}

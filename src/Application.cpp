@@ -246,6 +246,7 @@ void	Application::drawCube(const Mat4& mvp, const Colour& colour)
 void	Application::keybinds()
 {
 	float	speed = 1.5f * this->_dt; // Adjust speed based on frame time
+	float	rotSpeed = 40.0f * this->_dt;
 	Vec3 right = norm(cross(this->_cameraFront, this->_cameraUp));
 	if (glfwGetKey(_win, GLFW_KEY_W) == GLFW_PRESS)
 		_cameraPosition += _cameraFront * speed;
@@ -264,6 +265,29 @@ void	Application::keybinds()
 
 	if (glfwGetKey(_win, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
 		_cameraPosition -= _cameraUp * speed;
+
+	if (glfwGetKey(_win, GLFW_KEY_LEFT) == GLFW_PRESS)
+	{
+		this->_yaw -= rotSpeed;
+		this->updateCameraDirection();
+	}
+	if (glfwGetKey(_win, GLFW_KEY_RIGHT) == GLFW_PRESS)
+	{
+		this->_yaw += rotSpeed;
+		this->updateCameraDirection();
+	}
+	if (glfwGetKey(_win, GLFW_KEY_UP) == GLFW_PRESS)
+	{
+		this->_pitch += rotSpeed;
+		if(this->_pitch > 89.0f) this->_pitch = 89.0f;
+		this->updateCameraDirection();
+	}
+	if (glfwGetKey(_win, GLFW_KEY_DOWN) == GLFW_PRESS)
+	{
+		this->_pitch -= rotSpeed;
+		if(this->_pitch < -89.0f) this->_pitch = -89.0f;
+		this->updateCameraDirection();
+	}
 }
 
 /// @brief THe mouse callback function for GLFW, handles mouse movement and updates the camera direction accordingly
@@ -298,6 +322,7 @@ void	Application::mouseCallback(GLFWwindow* window, double xpos, double ypos)
 
 	float yawRad = app->_yaw * deg2rad;
 	float pitchRad = app->_pitch * deg2rad;
+
 	Vec3 front;
 	front.x = cosf(yawRad) * cosf(pitchRad);
 	front.y = sinf(pitchRad);
@@ -347,4 +372,17 @@ Mat4	Application::calcMVP()
 	);
 	Mat4	model = mat4_mul(translate(this->_tx, this->_ty, this->_tz), rotate_y(0.0f));
 	return mat4_mul(mat4_mul(proj, view), model);
+}
+
+void	Application::updateCameraDirection()
+{
+	float	yawRadian = this->_yaw * DEG2RAD;
+	float	pitchRadian = this->_pitch * DEG2RAD;
+
+	Vec3	front(
+		cosf(yawRadian) * cosf(pitchRadian),
+		sinf(pitchRadian),
+		sinf(yawRadian) * cosf(pitchRadian)
+	);
+	this->_cameraFront = norm(front);
 }
