@@ -8,6 +8,13 @@ Application::Application()
 	setupBuffers();
 	this->_mpvLoc = glGetUniformLocation(this->_prog, "uMVP");
 	this->_colLoc = glGetUniformLocation(this->_prog, "uColor");
+	this->_useTextureLoc = glGetUniformLocation(_prog, "uUseTexture");
+	this->_texLoc = glGetUniformLocation(this->_prog, "uTexture");
+
+	int w, h;
+	this->_textures[TextureType::Unicorn] = loadPPM("assets/unicorn.ppm", w, h);
+	if (this->_textures[TextureType::Unicorn] == 0)
+		std::cerr << "Loading texture failed" << std::endl;
 }
 
 Application::~Application()
@@ -69,19 +76,39 @@ int	Application::setupBuffers()
 	const char* fs_src;
 
 		vs_src = R"(#version 330 core
-		layout(location=0) in vec3 aPos;
+		layout(location = 0) in vec3 aPos;
+		layout(location = 1) in vec2 aTex;
+
 		uniform mat4 uMVP;
-		uniform vec3 uColor;
-		out vec3 vColor;
+
+		out vec2 vTex;
+
 		void main()
 		{
-			vColor = uColor;
+			vTex = aTex;
 			gl_Position = uMVP * vec4(aPos, 1.0);
 		}
 		)";
 		fs_src = R"(#version 330 core
-		in vec3 vColor; out vec4 FragColor;
-		void main(){ FragColor = vec4(vColor,1.0); }
+		in vec2 vTex;
+
+		uniform sampler2D uTexture;
+		uniform bool uUseTexture;
+		uniform vec3 uColor;
+
+		out vec4 FragColor;
+
+		void main()
+		{
+			vec2 flippedUV = vec2(vTex.x, 1.0 - vTex.y);
+			vec4 texColor = texture(uTexture, flippedUV);
+
+			FragColor = mix(
+				vec4(uColor, 1.0),
+				texColor,
+				float(uUseTexture)
+			);
+		}
 		)";
 		// VAO -> Vertex Array Object; VBO -> Vertex Buffer Object, stores data in GPU
 	glGenVertexArrays(1, &this->_VAO);
@@ -90,70 +117,73 @@ int	Application::setupBuffers()
 	glBindVertexArray(this->_VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, this->_VBO);
 
-	static const GLfloat	cube[] =
+	static const GLfloat cube[] =
 	{
 	// Front face (z = 0.5)
-	-0.5f,-0.5f, 0.5f,
-	 0.5f,-0.5f, 0.5f,
-	 0.5f, 0.5f, 0.5f,
+	-0.5f,-0.5f, 0.5f,  0.0f, 0.0f,
+	0.5f,-0.5f, 0.5f,  1.0f, 0.0f,
+	0.5f, 0.5f, 0.5f,  1.0f, 1.0f,
 
-	-0.5f,-0.5f, 0.5f,
-	 0.5f, 0.5f, 0.5f,
-	-0.5f, 0.5f, 0.5f,
+	-0.5f,-0.5f, 0.5f,  0.0f, 0.0f,
+	0.5f, 0.5f, 0.5f,  1.0f, 1.0f,
+	-0.5f, 0.5f, 0.5f,  0.0f, 1.0f,
 
 	// Back face (z = -0.5)
-	-0.5f,-0.5f,-0.5f,
-	 0.5f, 0.5f,-0.5f,
-	 0.5f,-0.5f,-0.5f,
+	-0.5f,-0.5f,-0.5f,  1.0f, 0.0f,
+	0.5f, 0.5f,-0.5f,  0.0f, 1.0f,
+	0.5f,-0.5f,-0.5f,  0.0f, 0.0f,
 
-	-0.5f,-0.5f,-0.5f,
-	-0.5f, 0.5f,-0.5f,
-	 0.5f, 0.5f,-0.5f,
+	-0.5f,-0.5f,-0.5f,  1.0f, 0.0f,
+	-0.5f, 0.5f,-0.5f,  1.0f, 1.0f,
+	0.5f, 0.5f,-0.5f,  0.0f, 1.0f,
 
 	// Left face (x = -0.5)
-	-0.5f,-0.5f,-0.5f,
-	-0.5f,-0.5f, 0.5f,
-	-0.5f, 0.5f, 0.5f,
+	-0.5f,-0.5f,-0.5f,  0.0f, 0.0f,
+	-0.5f,-0.5f, 0.5f,  1.0f, 0.0f,
+	-0.5f, 0.5f, 0.5f,  1.0f, 1.0f,
 
-	-0.5f,-0.5f,-0.5f,
-	-0.5f, 0.5f, 0.5f,
-	-0.5f, 0.5f,-0.5f,
+	-0.5f,-0.5f,-0.5f,  0.0f, 0.0f,
+	-0.5f, 0.5f, 0.5f,  1.0f, 1.0f,
+	-0.5f, 0.5f,-0.5f,  0.0f, 1.0f,
 
 	// Right face (x = 0.5)
-	 0.5f,-0.5f,-0.5f,
-	 0.5f, 0.5f, 0.5f,
-	 0.5f,-0.5f, 0.5f,
+	0.5f,-0.5f,-0.5f,  1.0f, 0.0f,
+	0.5f, 0.5f, 0.5f,  0.0f, 1.0f,
+	0.5f,-0.5f, 0.5f,  0.0f, 0.0f,
 
-	 0.5f,-0.5f,-0.5f,
-	 0.5f, 0.5f,-0.5f,
-	 0.5f, 0.5f, 0.5f,
+	0.5f,-0.5f,-0.5f,  1.0f, 0.0f,
+	0.5f, 0.5f,-0.5f,  1.0f, 1.0f,
+	0.5f, 0.5f, 0.5f,  0.0f, 1.0f,
 
 	// Top face (y = 0.5)
-	-0.5f, 0.5f,-0.5f,
-	-0.5f, 0.5f, 0.5f,
-	 0.5f, 0.5f, 0.5f,
+	-0.5f, 0.5f,-0.5f,  0.0f, 1.0f,
+	-0.5f, 0.5f, 0.5f,  0.0f, 0.0f,
+	0.5f, 0.5f, 0.5f,  1.0f, 0.0f,
 
-	-0.5f, 0.5f,-0.5f,
-	 0.5f, 0.5f, 0.5f,
-	 0.5f, 0.5f,-0.5f,
+	-0.5f, 0.5f,-0.5f,  0.0f, 1.0f,
+	0.5f, 0.5f, 0.5f,  1.0f, 0.0f,
+	0.5f, 0.5f,-0.5f,  1.0f, 1.0f,
 
 	// Bottom face (y = -0.5)
-	-0.5f,-0.5f,-0.5f,
-	 0.5f,-0.5f, 0.5f,
-	-0.5f,-0.5f, 0.5f,
+	-0.5f,-0.5f,-0.5f,  1.0f, 1.0f,
+	0.5f,-0.5f, 0.5f,  0.0f, 0.0f,
+	-0.5f,-0.5f, 0.5f,  1.0f, 0.0f,
 
-	-0.5f,-0.5f,-0.5f,
-	 0.5f,-0.5f,-0.5f,
-	 0.5f,-0.5f, 0.5f
+	-0.5f,-0.5f,-0.5f,  1.0f, 1.0f,
+	0.5f,-0.5f,-0.5f,  0.0f, 1.0f,
+	0.5f,-0.5f, 0.5f,  0.0f, 0.0f
 	};
 
 	// // Allows GPU to access the basic cube building block (uploads it)
 	glBufferData(GL_ARRAY_BUFFER, sizeof(cube), cube, GL_STATIC_DRAW);
 
-	// // First 3 floats are coordinates
+	// position (vertex)
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (const void*)0);
 	glEnableVertexAttribArray(0);
-	// 6 * sizeof(float) because each vertex has 6 floats (3 for position, 3 for color)
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (const void*)0);
+
+	// texture cordinates
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
 
 	glBindVertexArray(0);
 	// compile shaders + link
@@ -166,6 +196,7 @@ int	Application::setupBuffers()
 	}
 
 	this->_prog = linkProgram(vs, fs);
+	glUseProgram(this->_prog);
 	glDeleteShader(vs);
 	glDeleteShader(fs);
 	return 0;
@@ -229,12 +260,25 @@ Mat4	Application::pop()
 /// @brief Draws a 1x1x1 cube centered at the origin using the provided MVP matrix and colour
 /// @param mvp The combined Model-View-Projection matrix to transform the cube vertices
 /// @param colour The RGB colour to use for the cube
-void	Application::drawCube(const Mat4& mvp, const Colour& colour)
+/// @param tex The enum that chooses the texture or none
+void	Application::drawCube(const Mat4& mvp, const Colour& colour, TextureType tex)
 {
 	glUseProgram(this->_prog);
-	glUniformMatrix4fv(this->_mpvLoc, 1, GL_FALSE, mvp.m);
 
+	glUniformMatrix4fv(this->_mpvLoc, 1, GL_FALSE, mvp.m);
 	glUniform3f(this->_colLoc, colour.r, colour.g, colour.b);
+
+	bool	useTexture = (tex != TextureType::None);
+
+	glUniform1i(this->_useTextureLoc, useTexture);
+	glUniform1i(this->_texLoc, 0);
+
+	glActiveTexture(GL_TEXTURE0);
+
+	if (useTexture)
+		glBindTexture(GL_TEXTURE_2D, this->_textures[tex]);
+	else
+		glBindTexture(GL_TEXTURE_2D, 0);
 
 	glBindVertexArray(this->_VAO);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
@@ -385,4 +429,57 @@ void	Application::updateCameraDirection()
 		sinf(yawRadian) * cosf(pitchRadian)
 	);
 	this->_cameraFront = norm(front);
+}
+
+/**
+ * @brief Loads a .ppm texture into opengl
+ * @param path texture path
+ * @param width returns the width
+ * @param height returns the height
+ * @return returns the texture
+ */
+GLuint	Application::loadPPM(const std::string& path, int& width, int&height)
+{
+	std::ifstream file(path, std::ios::binary);
+	if (!file)
+	{
+		return 0;
+	}
+	std::string format;
+	file >> format;
+	if (format != "P6")
+	{
+		return 0;
+	}
+
+	file >> width >> height;
+	int maxVal;
+	file >> maxVal;
+	file.ignore(256, '\n');
+
+	int dataSize = width * height * 3;
+	std::vector<unsigned char> data(dataSize);
+	file.read(reinterpret_cast<char*>(data.data()), dataSize);
+
+	if (!file)
+	{
+		return 0;
+	}
+
+	GLuint texID;
+	glGenTextures(1, &texID);
+	glBindTexture(GL_TEXTURE_2D, texID);
+
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data.data());
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	return texID;
 }

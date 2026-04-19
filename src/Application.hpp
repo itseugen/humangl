@@ -14,6 +14,12 @@ struct Colour
 	Colour(float red, float green, float blue): r(red), g(green), b(blue) {}
 };
 
+enum class TextureType
+{
+	None,
+	Unicorn,
+};
+
 struct Application
 {
 	GLFWwindow*	_win = nullptr;
@@ -54,18 +60,23 @@ struct Application
 	void	push(const Mat4& mat);
 	Mat4	pop();
 	
-	void	drawCube(const Mat4& mvp, const Colour& colour);
+	void	drawCube(const Mat4& mvp, const Colour& colour, TextureType tex);
 	Mat4	calcMVP();
+
+	std::unordered_map<TextureType, GLuint>	_textures;
 
 	private:
 		GLuint	_mpvLoc;
 		GLint	_colLoc;
+		GLint	_useTextureLoc;
+		GLint	_texLoc;
 		bool	_mouseActive = false;
 		static void	keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 		static void	mouseCallback(GLFWwindow* window, double xpos, double ypos);
 		static constexpr float	DEG2RAD = 3.14159265f / 180.0f;
 		static constexpr float	DEG2RADFOV = 45.0f * DEG2RAD;
 		void	updateCameraDirection();
+		GLuint	loadPPM(const std::string& path, int& width, int&height);
 };
 
 GLuint compileShader(GLenum type, const char* src);
