@@ -38,6 +38,8 @@ typedef void	(*PFNGLGENERATEMIPMAPPROC)(GLenum);
 
 typedef void	(*PFNGLUNIFORM3FPROC)(GLint, GLfloat, GLfloat, GLfloat);
 
+typedef void	(*PFNGLUNIFORM1IPROC)(GLint location, GLint v0);
+
 // function pointers
 extern PFNGLCREATESHADERPROC				glCreateShader_ptr;
 extern PFNGLSHADERSOURCEPROC				glShaderSource_ptr;
@@ -70,6 +72,8 @@ extern PFNGLTEXIMAGE2DPROC					glTexImage2D_ptr;
 extern PFNGLGENERATEMIPMAPPROC				glGenerateMipmap_ptr;
 
 extern PFNGLUNIFORM3FPROC					glUniform3f_ptr;
+
+extern PFNGLUNIFORM1IPROC					glUniform1i_ptr;
 
 // helper to load a symbol
 template<typename T>
@@ -116,3 +120,5 @@ bool loadGLFunctions();
 #define glGenerateMipmap glGenerateMipmap_ptr
 
 #define glUniform3f glUniform3f_ptr
+
+#define glUniform1i glUniform1i_ptr

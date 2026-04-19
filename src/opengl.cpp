@@ -32,6 +32,8 @@ PFNGLGENERATEMIPMAPPROC				glGenerateMipmap_ptr = nullptr;
 
 PFNGLUNIFORM3FPROC					glUniform3f_ptr = nullptr;
 
+PFNGLUNIFORM1IPROC					glUniform1i_ptr = nullptr;
+
 bool loadGLFunctions()
 {
 	// load pointers we declared
@@ -66,5 +68,8 @@ bool loadGLFunctions()
 	if(!loadProc(glGenerateMipmap, "glGenerateMipmap")) return false;
 
 	if(!loadProc(glUniform3f, "glUniform3f")) return false;
+
+	if(!loadProc(glUniform1i_ptr, "glUniform1i")) return false;
+
 	return true;
 }
