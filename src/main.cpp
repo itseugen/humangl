@@ -30,7 +30,8 @@ int main()
 		Mat4 MVP = app.calcMVP();
 
 		// app.drawCube(MVP, Colour(1.0f, 0.0f, 0.0f), TextureType::None);
-		app.drawCube(MVP, Colour(1.0f, 1.0f, 0.0f), TextureType::Unicorn);
+		// app.drawCube(MVP, Colour(1.0f, 1.0f, 0.0f), TextureType::Unicorn);
+		app.drawCube(MVP, Colour(1.0f, 1.0f, 0.0f), TextureType::Dirt);
 		// Display rendered stuff
 		glfwSwapBuffers(app._win);
 		// Mouse and keyboard events

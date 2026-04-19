@@ -18,6 +18,7 @@ enum class TextureType
 {
 	None,
 	Unicorn,
+	Dirt,
 };
 
 struct Application

@@ -14,7 +14,10 @@ Application::Application()
 	int w, h;
 	this->_textures[TextureType::Unicorn] = loadPPM("assets/unicorn.ppm", w, h);
 	if (this->_textures[TextureType::Unicorn] == 0)
-		std::cerr << "Loading texture failed" << std::endl;
+		std::cerr << "Loading Unicorn failed" << std::endl;
+	this->_textures[TextureType::Dirt] = loadPPM("assets/dirt.ppm", w, h);
+	if (this->_textures[TextureType::Dirt] == 0)
+		std::cerr << "Loading Dirt failed" << std::endl;
 }
 
 Application::~Application()
