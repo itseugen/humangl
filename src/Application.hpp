@@ -46,7 +46,7 @@ struct Application
 
 	Vec3 _cameraFront = {0, 0, -1};
 	Vec3 _cameraUp = {0, 1, 0};
-	Vec3 _cameraPosition = {0, 0.6f, 3.0f};
+	Vec3 _cameraPosition = {-6.0f, 2.0f, 14.0f};
 
 	std::vector<Mat4>	_stack;
 
@@ -62,7 +62,7 @@ struct Application
 	Mat4	pop();
 	
 	void	drawCube(const Mat4& mvp, const Colour& colour, TextureType tex);
-	Mat4	calcMVP();
+	Mat4	calcMVP(Vec3 scale = Vec3{1.0f, 1.0f, 1.0f});
 
 	std::unordered_map<TextureType, GLuint>	_textures;
 

@@ -335,6 +335,7 @@ void	Application::keybinds()
 		if(this->_pitch < -89.0f) this->_pitch = -89.0f;
 		this->updateCameraDirection();
 	}
+	// std::cout << "Pitch: " << this->_pitch << " Yaw: " << this->_yaw << std::endl;
 }
 
 /// @brief THe mouse callback function for GLFW, handles mouse movement and updates the camera direction accordingly
@@ -409,7 +410,7 @@ void	Application::keyCallback(GLFWwindow* window, int key, int scancode, int act
 
 /// @brief Standard MVP calculation (Replace DEG2RADFOV with DEG2RAD and the fov if it ever becomes a variable)
 /// @return The combined Model-View-Projection matrix
-Mat4	Application::calcMVP()
+Mat4	Application::calcMVP(Vec3 scale)
 {
 	Mat4	proj = perspective(DEG2RADFOV, (float)this->_winWidth/(float)this->_winHeight, 0.1f, 100.f);
 	Mat4	view = lookAt(
@@ -417,7 +418,13 @@ Mat4	Application::calcMVP()
 		Vec3{this->_cameraPosition.x + this->_cameraFront.x, this->_cameraPosition.y + this->_cameraFront.y, this->_cameraPosition.z + this->_cameraFront.z},
 		this->_cameraUp
 	);
-	Mat4	model = mat4_mul(translate(this->_tx, this->_ty, this->_tz), rotate_y(0.0f));
+	Mat4	model = mat4_mul(
+		translate(this->_tx, this->_ty, this->_tz),
+		mat4_mul(
+			rotate_y(0.0f),
+			mat4_scale(scale)
+		)
+	);
 	return mat4_mul(mat4_mul(proj, view), model);
 }
 

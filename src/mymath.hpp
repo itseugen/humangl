@@ -61,6 +61,9 @@ Mat4	perspective (float fovyRad, float aspect, float zn, float zf);
 // LookAt matrix: camera position, target, up vector
 Mat4	lookAt(const Vec3 &position, const Vec3 &target, const Vec3 &up);
 
+// Scale by x, y, z
+Mat4	mat4_scale(Vec3 s);
+
 Vec3	sub(Vec3 a, Vec3 b);
 Vec3	norm(Vec3 v);
 Vec3	cross(Vec3 a, Vec3 b);

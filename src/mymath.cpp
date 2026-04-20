@@ -184,3 +184,12 @@ Vec3	Vec3::operator-=(const Vec3& other)
 Vec3::Vec3() {}
 
 Vec3::Vec3(float x_, float y_, float z_): x(x_), y(y_), z(z_) {}
+
+Mat4	mat4_scale(Vec3 s)
+{
+	Mat4 r = mat4_identity();
+	r.m[0] = s.x;
+	r.m[5] = s.y;
+	r.m[10] = s.z;
+	return r;
+}

@@ -27,10 +27,11 @@ int main()
 		// Cloar buffer
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		Mat4 MVP = app.calcMVP();
+		Mat4 MVP = app.calcMVP(Vec3(1.0f, 6.0f, 4.0f));
 
 		// app.drawCube(MVP, Colour(1.0f, 0.0f, 0.0f), TextureType::None);
 		// app.drawCube(MVP, Colour(1.0f, 1.0f, 0.0f), TextureType::Unicorn);
+
 		app.drawCube(MVP, Colour(1.0f, 1.0f, 0.0f), TextureType::Dirt);
 		// Display rendered stuff
 		glfwSwapBuffers(app._win);
