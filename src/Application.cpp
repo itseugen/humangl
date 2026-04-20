@@ -409,6 +409,7 @@ void	Application::keyCallback(GLFWwindow* window, int key, int scancode, int act
 }
 
 /// @brief Standard MVP calculation (Replace DEG2RADFOV with DEG2RAD and the fov if it ever becomes a variable)
+/// @param scale Optional scaling factor for the model, defaults to 1 (no scaling)
 /// @return The combined Model-View-Projection matrix
 Mat4	Application::calcMVP(Vec3 scale)
 {
