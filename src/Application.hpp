@@ -21,6 +21,20 @@ enum class TextureType
 	Dirt,
 };
 
+struct BodyPart
+{
+	Mat4 local;
+	Mat4 shape;
+	Colour colour;
+	TextureType tex;
+};
+
+struct Body
+{
+	BodyPart	torso;
+	BodyPart	head;
+};
+
 struct Application
 {
 	GLFWwindow*	_win = nullptr;
@@ -62,9 +76,11 @@ struct Application
 	Mat4	pop();
 	
 	void	drawCube(const Mat4& mvp, const Colour& colour, TextureType tex);
-	Mat4	calcMVP(Vec3 scale = Vec3{1.0f, 1.0f, 1.0f});
+	Mat4	calcMVP(const BodyPart& bodyPart);
 
 	std::unordered_map<TextureType, GLuint>	_textures;
+
+	Body	_body;
 
 	private:
 		GLuint	_mpvLoc;
@@ -78,6 +94,7 @@ struct Application
 		static constexpr float	DEG2RADFOV = 45.0f * DEG2RAD;
 		void	updateCameraDirection();
 		GLuint	loadPPM(const std::string& path, int& width, int&height);
+		void	initBody();
 };
 
 GLuint compileShader(GLenum type, const char* src);

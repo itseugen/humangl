@@ -27,13 +27,17 @@ int main()
 		// Cloar buffer
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		Mat4 MVP = app.calcMVP(Vec3(1.0f, 6.0f, 4.0f));
+		Mat4 MVP = app.calcMVP(app._body.torso);
 
 		// app.drawCube(MVP, Colour(1.0f, 0.0f, 0.0f), TextureType::None);
-		app.drawCube(MVP, Colour(1.0f, 1.0f, 0.0f), TextureType::Unicorn);
+		app.drawCube(MVP, app._body.torso.colour, app._body.torso.tex);
 
-		MVP = app.calcMVP(Vec3(2.0f, 2.0f, 2.0f));
-		app.drawCube(MVP, Colour(1.0f, 1.0f, 0.0f), TextureType::Dirt);
+		Mat4	torsoWorld = app._body.torso.local;
+		Mat4	headWorld = mat4_mul (torsoWorld, translate(0.0f, 4.0f, 0.0f));
+		app._body.head.local = headWorld;
+
+		MVP = app.calcMVP(app._body.head);
+		app.drawCube(MVP, app._body.head.colour, app._body.head.tex);
 		// Display rendered stuff
 		glfwSwapBuffers(app._win);
 		// Mouse and keyboard events

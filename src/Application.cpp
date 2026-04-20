@@ -18,6 +18,8 @@ Application::Application()
 	this->_textures[TextureType::Dirt] = loadPPM("assets/dirt.ppm", w, h);
 	if (this->_textures[TextureType::Dirt] == 0)
 		std::cerr << "Loading Dirt failed" << std::endl;
+	
+	this->initBody();
 }
 
 Application::~Application()
@@ -411,7 +413,7 @@ void	Application::keyCallback(GLFWwindow* window, int key, int scancode, int act
 /// @brief Standard MVP calculation (Replace DEG2RADFOV with DEG2RAD and the fov if it ever becomes a variable)
 /// @param model Takes a model matrix (a body part)
 /// @return The combined Model-View-Projection matrix
-Mat4	Application::calcMVP(const Mat4& model)
+Mat4	Application::calcMVP(const BodyPart& bodyPart)
 {
 	Mat4	proj = perspective(DEG2RADFOV, (float)this->_winWidth/(float)this->_winHeight, 0.1f, 100.f);
 	Mat4	view = lookAt(
@@ -419,6 +421,7 @@ Mat4	Application::calcMVP(const Mat4& model)
 		Vec3{this->_cameraPosition.x + this->_cameraFront.x, this->_cameraPosition.y + this->_cameraFront.y, this->_cameraPosition.z + this->_cameraFront.z},
 		this->_cameraUp
 	);
+	Mat4	model = mat4_mul(bodyPart.local, bodyPart.shape);
 	return mat4_mul(mat4_mul(proj, view), model);
 }
 
@@ -486,4 +489,17 @@ GLuint	Application::loadPPM(const std::string& path, int& width, int&height)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	return texID;
+}
+
+void	Application::initBody()
+{
+	this->_body.torso.local = mat4_identity();
+	this->_body.torso.shape = mat4_scale(Vec3{1.0f, 6.0f, 4.0f});
+	this->_body.torso.colour = Colour(1.0f, 0.0f, 0.0f);
+	this->_body.torso.tex = TextureType::Unicorn;
+
+	this->_body.head.local = mat4_identity();
+	this->_body.head.shape = mat4_scale(Vec3{2.0f, 2.0f, 2.0f});
+	this->_body.head.colour = Colour(0.0f, 1.0f, 0.0f);
+	this->_body.head.tex = TextureType::Dirt;
 }
