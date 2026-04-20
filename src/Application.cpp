@@ -409,22 +409,15 @@ void	Application::keyCallback(GLFWwindow* window, int key, int scancode, int act
 }
 
 /// @brief Standard MVP calculation (Replace DEG2RADFOV with DEG2RAD and the fov if it ever becomes a variable)
-/// @param scale Optional scaling factor for the model, defaults to 1 (no scaling)
+/// @param model Takes a model matrix (a body part)
 /// @return The combined Model-View-Projection matrix
-Mat4	Application::calcMVP(Vec3 scale)
+Mat4	Application::calcMVP(const Mat4& model)
 {
 	Mat4	proj = perspective(DEG2RADFOV, (float)this->_winWidth/(float)this->_winHeight, 0.1f, 100.f);
 	Mat4	view = lookAt(
 		Vec3{this->_cameraPosition.x, this->_cameraPosition.y, this->_cameraPosition.z},
 		Vec3{this->_cameraPosition.x + this->_cameraFront.x, this->_cameraPosition.y + this->_cameraFront.y, this->_cameraPosition.z + this->_cameraFront.z},
 		this->_cameraUp
-	);
-	Mat4	model = mat4_mul(
-		translate(this->_tx, this->_ty, this->_tz),
-		mat4_mul(
-			rotate_y(0.0f),
-			mat4_scale(scale)
-		)
 	);
 	return mat4_mul(mat4_mul(proj, view), model);
 }
