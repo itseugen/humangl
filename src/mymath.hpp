@@ -49,11 +49,14 @@ Mat4	mat4_identity();
 // Matrix multiplication (column-major order)
 Mat4	mat4_mul(const Mat4 &a, const Mat4 &b);
 
+Mat4	operator*(const Mat4& a, const Mat4& b);
+
 // Produces a matrix that moves by xyz in space
 Mat4	translate(float x, float y, float z);
 
 // spinning spinning spinning
 Mat4	rotate_y(float angle);
+Mat4	rotate_z(float angle);
 
 // depth projection and stuff
 Mat4	perspective (float fovyRad, float aspect, float zn, float zf);

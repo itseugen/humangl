@@ -78,6 +78,18 @@ Mat4	rotate_y(float angle)
 	return r;
 }
 
+Mat4 rotate_z(float angle)
+{
+	float c = cosf(angle);
+	float s = sinf(angle);
+	Mat4 r = mat4_identity();
+	r.m[0] = c;
+	r.m[1] = -s;
+	r.m[4] = s;
+	r.m[5] = c;
+	return r;
+}
+
 /**
  * @brief Gives the 3D scene depth
  * @param fovyRad Vertical fov in rad
@@ -192,4 +204,9 @@ Mat4	mat4_scale(Vec3 s)
 	r.m[5] = s.y;
 	r.m[10] = s.z;
 	return r;
+}
+
+Mat4	operator*(const Mat4& a, const Mat4& b)
+{
+	return mat4_mul(a, b);
 }
