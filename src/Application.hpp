@@ -23,7 +23,7 @@ enum class TextureType
 
 struct BodyPart
 {
-	Mat4 local;
+	Mat4 base;
 	Mat4 shape;
 	Colour colour;
 	TextureType tex;

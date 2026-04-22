@@ -32,12 +32,6 @@ int main()
 		// app.drawCube(MVP, Colour(1.0f, 0.0f, 0.0f), TextureType::None);
 		app.drawCube(MVP, app._body.torso.colour, app._body.torso.tex);
 
-		Mat4	torsoWorld = app._body.torso.local;
-		Mat4	headWorld = mat4_mul (torsoWorld, translate(0.0f, 4.0f, 0.0f));
-		app._body.head.local = headWorld;
-
-		MVP = app.calcMVP(app._body.head);
-		app.drawCube(MVP, app._body.head.colour, app._body.head.tex);
 		// Display rendered stuff
 		glfwSwapBuffers(app._win);
 		// Mouse and keyboard events

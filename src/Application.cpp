@@ -421,7 +421,7 @@ Mat4	Application::calcMVP(const BodyPart& bodyPart)
 		Vec3{this->_cameraPosition.x + this->_cameraFront.x, this->_cameraPosition.y + this->_cameraFront.y, this->_cameraPosition.z + this->_cameraFront.z},
 		this->_cameraUp
 	);
-	Mat4	model = mat4_mul(bodyPart.local, bodyPart.shape);
+	Mat4	model = mat4_mul(bodyPart.base, bodyPart.shape);
 	return mat4_mul(mat4_mul(proj, view), model);
 }
 
@@ -493,12 +493,12 @@ GLuint	Application::loadPPM(const std::string& path, int& width, int&height)
 
 void	Application::initBody()
 {
-	this->_body.torso.local = mat4_identity();
+	this->_body.torso.base = mat4_identity();
 	this->_body.torso.shape = mat4_scale(Vec3{1.0f, 6.0f, 4.0f});
 	this->_body.torso.colour = Colour(1.0f, 0.0f, 0.0f);
 	this->_body.torso.tex = TextureType::Unicorn;
 
-	this->_body.head.local = mat4_identity();
+	this->_body.head.base = mat4_identity();
 	this->_body.head.shape = mat4_scale(Vec3{2.0f, 2.0f, 2.0f});
 	this->_body.head.colour = Colour(0.0f, 1.0f, 0.0f);
 	this->_body.head.tex = TextureType::Dirt;
