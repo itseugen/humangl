@@ -33,12 +33,12 @@ int main()
 		app.push(app.top() * translate(posX, 0.0f, 0.0f) * app._body.torso.local); // Not necessary to push the identity but it shows how the stack works
 		app.draw(app._body.torso, app.top());
 
-		Mat4 headNod = translate(0.0f, -app._body.head.size.y * 0.5f, 0.0f) * nod(now, 1.5f) * translate(0.0f, app._body.head.size.y * 0.5f, 0.0f);
+		Mat4 headNod = applyJointRoation(app._body.head, nod(now, 1.5f));
 		app.push(app.top() * app._body.head.local * headNod);
 		app.draw(app._body.head, app.top());
 		app.pop(); // head
 
-		Mat4 armNod = translate(0.0f, app._body.upperLeftArm.size.y * 0.5f, 0.0f) * nod(now -0.5f, 0.5f) * translate(0.0f, -app._body.upperLeftArm.size.y * 0.5f, 0.0f);
+		Mat4 armNod = applyJointRoation(app._body.upperLeftArm, nod(now -0.5f, 0.5f));
 		app.push(app.top() * app._body.upperLeftArm.local * armNod);
 		app.draw(app._body.upperLeftArm, app.top());
 		app.pop(); // upper left arm

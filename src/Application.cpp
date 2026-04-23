@@ -508,6 +508,7 @@ void	Application::initBody()
 	this->_body.torso.local = mat4_identity();
 	this->_body.torso.shape = mat4_scale(Vec3{1.0f, 6.0f, 4.0f});
 	this->_body.torso.size = Vec3{1.0f, 6.0f, 4.0f};
+	this->_body.torso.jointPivot = Vec3{0.0f, 0.0f, 0.0f};
 	this->_body.torso.colour = Colour(1.0f, 0.0f, 0.0f);
 	this->_body.torso.tex = TextureType::Unicorn;
 
@@ -518,6 +519,7 @@ void	Application::initBody()
 	float torsoHalf = this->_body.torso.size.y * 0.5f;
 	float headHalf  = this->_body.head.size.y * 0.5f;
 	this->_body.head.local = translate(0.0f, torsoHalf + headHalf, 0.0f);
+	this->_body.head.jointPivot = Vec3{0.0f, -headHalf, 0.0f};
 	this->_body.head.colour = Colour(0.0f, 1.0f, 0.0f);
 	this->_body.head.tex = TextureType::Dirt;
 
@@ -532,7 +534,8 @@ void	Application::initBody()
 		this->_body.torso.size.y * 0.5f, 
 		this->_body.torso.size.z * 0.5f + armHalfZ
 	};
-	this->_body.upperLeftArm.local = translate(torsoShoulderLeft.x, torsoShoulderLeft.y, torsoShoulderLeft.z) * translate(-armHalfX, -armHalfY, 0.0f);
+	this->_body.upperLeftArm.local = translate(torsoShoulderLeft) * translate(-armHalfX, -armHalfY, 0.0f);
 	this->_body.upperLeftArm.colour = Colour(1.0f, 0.0f, 0.0f);
 	this->_body.upperLeftArm.tex = TextureType::None;
+	this->_body.upperLeftArm.jointPivot = Vec3{0.0f, armHalfY, 0.0f};
 }
