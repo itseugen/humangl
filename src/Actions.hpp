@@ -3,5 +3,7 @@
 #include "humangl.h"
 #include "Application.hpp"
 
+struct BodyPart;
+
 Mat4	nod(float time, float nodSpeed);
 Mat4	applyJointRoation(const BodyPart& part, const Mat4&rotation);

@@ -538,4 +538,20 @@ void	Application::initBody()
 	this->_body.upperLeftArm.colour = Colour(1.0f, 0.0f, 0.0f);
 	this->_body.upperLeftArm.tex = TextureType::None;
 	this->_body.upperLeftArm.jointPivot = Vec3{0.0f, armHalfY, 0.0f};
+
+	/* UPPER RIGHT ARM */
+	this->_body.upperRightArm.shape = mat4_scale(Vec3{1.0f, 4.0f, 1.0f});
+	this->_body.upperRightArm.size = Vec3{1.0f, 4.0f, 1.0f};
+	armHalfY = this->_body.upperRightArm.size.y * 0.5f;
+	armHalfX = this->_body.upperRightArm.size.x * 0.5f;
+	armHalfZ = this->_body.upperRightArm.size.z * 0.5f;
+	Vec3 torsoShoulderRight = Vec3{
+		armHalfX,
+		this->_body.torso.size.y * 0.5f, 
+		-(this->_body.torso.size.z * 0.5f + armHalfZ)
+	};
+	this->_body.upperRightArm.local = translate(torsoShoulderRight) * translate(-armHalfX, -armHalfY, 0.0f);
+	this->_body.upperRightArm.colour = Colour(1.0f, 0.0f, 0.0f);
+	this->_body.upperRightArm.tex = TextureType::None;
+	this->_body.upperRightArm.jointPivot = Vec3{0.0f, armHalfY, 0.0f};
 }

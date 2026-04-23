@@ -9,6 +9,7 @@ int main()
 	glEnable(GL_DEPTH_TEST);
 
 	float last = (float)glfwGetTime();
+	float angle = 0.0f;
 	while(!glfwWindowShouldClose(app._win))
 	{
 		float now = (float)glfwGetTime();
@@ -29,6 +30,9 @@ int main()
 		static float posX = 0.0f;
 		posX -= 0.5f * app._dt;
 
+		// If I want to rotate stuff
+		angle += 4.0f * app._dt;
+		if (angle >= 360.0f) angle -= 360.0f;
 		app.push(mat4_identity());
 		app.push(app.top() * translate(posX, 0.0f, 0.0f) * app._body.torso.local); // Not necessary to push the identity but it shows how the stack works
 		app.draw(app._body.torso, app.top());
@@ -42,6 +46,11 @@ int main()
 		app.push(app.top() * app._body.upperLeftArm.local * armNod);
 		app.draw(app._body.upperLeftArm, app.top());
 		app.pop(); // upper left arm
+
+		armNod = applyJointRoation(app._body.upperRightArm, nod(now -0.75f, 0.5f));
+		app.push(app.top() * app._body.upperRightArm.local * armNod);
+		app.draw(app._body.upperRightArm, app.top());
+		app.pop(); // upper right arm
 		app.pop(); // torso
 		app.pop(); // identity
 

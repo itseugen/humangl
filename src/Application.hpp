@@ -36,6 +36,7 @@ struct Body
 	BodyPart	torso;
 	BodyPart	head;
 	BodyPart	upperLeftArm;
+	BodyPart	upperRightArm;
 };
 
 struct Application
