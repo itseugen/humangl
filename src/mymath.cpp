@@ -61,6 +61,11 @@ Mat4	translate(float x, float y, float z)
 	return r;
 }
 
+Mat4 translate(const Vec3 &v)
+{
+	return translate(v.x, v.y, v.z);
+}
+
 /**
  * @brief Rotation around the Y axis
  * @param angle in radians

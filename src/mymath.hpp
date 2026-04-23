@@ -53,6 +53,7 @@ Mat4	operator*(const Mat4& a, const Mat4& b);
 
 // Produces a matrix that moves by xyz in space
 Mat4	translate(float x, float y, float z);
+Mat4	translate(const Vec3 &v);
 
 // spinning spinning spinning
 Mat4	rotate_y(float angle);
