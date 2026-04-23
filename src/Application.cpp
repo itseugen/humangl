@@ -524,8 +524,8 @@ void	Application::initBody()
 	this->_body.head.tex = TextureType::Dirt;
 
 	/* UPPER LEFT ARM */
-	this->_body.upperLeftArm.shape = mat4_scale(Vec3{1.0f, 4.0f, 1.0f});
-	this->_body.upperLeftArm.size = Vec3{1.0f, 4.0f, 1.0f};
+	this->_body.upperLeftArm.shape = mat4_scale(Vec3{1.0f, 3.5f, 1.0f});
+	this->_body.upperLeftArm.size = Vec3{1.0f, 3.5f, 1.0f};
 	float armHalfY = this->_body.upperLeftArm.size.y * 0.5f;
 	float armHalfX = this->_body.upperLeftArm.size.x * 0.5f;
 	float armHalfZ = this->_body.upperLeftArm.size.z * 0.5f;
@@ -540,8 +540,8 @@ void	Application::initBody()
 	this->_body.upperLeftArm.jointPivot = Vec3{0.0f, armHalfY, 0.0f};
 
 	/* UPPER RIGHT ARM */
-	this->_body.upperRightArm.shape = mat4_scale(Vec3{1.0f, 4.0f, 1.0f});
-	this->_body.upperRightArm.size = Vec3{1.0f, 4.0f, 1.0f};
+	this->_body.upperRightArm.shape = mat4_scale(Vec3{1.0f, 3.5f, 1.0f});
+	this->_body.upperRightArm.size = Vec3{1.0f, 3.5f, 1.0f};
 	armHalfY = this->_body.upperRightArm.size.y * 0.5f;
 	armHalfX = this->_body.upperRightArm.size.x * 0.5f;
 	armHalfZ = this->_body.upperRightArm.size.z * 0.5f;
