@@ -62,8 +62,6 @@ struct Application
 	Vec3 _cameraUp = {0, 1, 0};
 	Vec3 _cameraPosition = {-6.0f, 2.0f, 14.0f};
 
-	std::vector<Mat4>	_stack;
-
 	Application();
 	~Application();
 
@@ -72,8 +70,10 @@ struct Application
 
 	void	keybinds();
 	
-	void	push(const Mat4& mat);
-	Mat4	pop();
+	void		push(const Mat4& mat);
+	Mat4		pop();
+	Mat4&		top();
+	const Mat4&	top() const;
 	
 	void	drawCube(const Mat4& mvp, const Colour& colour, TextureType tex);
 	Mat4	calcMVP(const BodyPart& bodyPart);
@@ -95,6 +95,7 @@ struct Application
 		void	updateCameraDirection();
 		GLuint	loadPPM(const std::string& path, int& width, int&height);
 		void	initBody();
+			std::vector<Mat4>	_stack;
 };
 
 GLuint compileShader(GLenum type, const char* src);

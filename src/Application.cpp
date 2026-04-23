@@ -262,6 +262,24 @@ Mat4	Application::pop()
 	return top;
 }
 
+Mat4&	Application::top()
+{
+	if(this->_stack.empty())
+	{
+		throw std::runtime_error("Matrix stack is empty!");
+	}
+	return this->_stack.back();
+}
+
+const Mat4&	Application::top() const
+{
+	if(this->_stack.empty())
+	{
+		throw std::runtime_error("Matrix stack is empty!");
+	}
+	return this->_stack.back();
+}
+
 /// @brief Draws a 1x1x1 cube centered at the origin using the provided MVP matrix and colour
 /// @param mvp The combined Model-View-Projection matrix to transform the cube vertices
 /// @param colour The RGB colour to use for the cube
