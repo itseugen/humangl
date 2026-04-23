@@ -280,18 +280,26 @@ const Mat4&	Application::top() const
 	return this->_stack.back();
 }
 
-/// @brief Draws a 1x1x1 cube centered at the origin using the provided MVP matrix and colour
-/// @param mvp The combined Model-View-Projection matrix to transform the cube vertices
-/// @param colour The RGB colour to use for the cube
-/// @param tex The enum that chooses the texture or none
-void	Application::drawCube(const Mat4& mvp, const Colour& colour, TextureType tex)
+/// @brief Draws a 1x1x1 cube centered at the origin using the body part and the world matrix
+/// @param bodyPart the body part, contains the shape, colour and texture
+/// @param world the world matrix, contains the position and rotation of the body part in the world
+void	Application::draw(const BodyPart& bodyPart, const Mat4& world)
 {
+	Mat4	proj = perspective(DEG2RADFOV, (float)this->_winWidth/(float)this->_winHeight, 0.1f, 100.f);
+	Mat4	view = lookAt(
+		Vec3{this->_cameraPosition.x, this->_cameraPosition.y, this->_cameraPosition.z},
+		Vec3{this->_cameraPosition.x + this->_cameraFront.x, this->_cameraPosition.y + this->_cameraFront.y, this->_cameraPosition.z + this->_cameraFront.z},
+		this->_cameraUp
+	);
+	Mat4	model = world * bodyPart.shape;
+	Mat4	mvp = proj * view * model;
+
 	glUseProgram(this->_prog);
 
 	glUniformMatrix4fv(this->_mpvLoc, 1, GL_FALSE, mvp.m);
-	glUniform3f(this->_colLoc, colour.r, colour.g, colour.b);
+	glUniform3f(this->_colLoc, bodyPart.colour.r, bodyPart.colour.g, bodyPart.colour.b);
 
-	bool	useTexture = (tex != TextureType::None);
+	bool	useTexture = (bodyPart.tex != TextureType::None);
 
 	glUniform1i(this->_useTextureLoc, useTexture);
 	glUniform1i(this->_texLoc, 0);
@@ -299,7 +307,7 @@ void	Application::drawCube(const Mat4& mvp, const Colour& colour, TextureType te
 	glActiveTexture(GL_TEXTURE0);
 
 	if (useTexture)
-		glBindTexture(GL_TEXTURE_2D, this->_textures[tex]);
+		glBindTexture(GL_TEXTURE_2D, this->_textures[bodyPart.tex]);
 	else
 		glBindTexture(GL_TEXTURE_2D, 0);
 
@@ -428,21 +436,6 @@ void	Application::keyCallback(GLFWwindow* window, int key, int scancode, int act
 	}
 }
 
-/// @brief Standard MVP calculation (Replace DEG2RADFOV with DEG2RAD and the fov if it ever becomes a variable)
-/// @param model Takes a model matrix (a body part)
-/// @return The combined Model-View-Projection matrix
-Mat4	Application::calcMVP(const BodyPart& bodyPart)
-{
-	Mat4	proj = perspective(DEG2RADFOV, (float)this->_winWidth/(float)this->_winHeight, 0.1f, 100.f);
-	Mat4	view = lookAt(
-		Vec3{this->_cameraPosition.x, this->_cameraPosition.y, this->_cameraPosition.z},
-		Vec3{this->_cameraPosition.x + this->_cameraFront.x, this->_cameraPosition.y + this->_cameraFront.y, this->_cameraPosition.z + this->_cameraFront.z},
-		this->_cameraUp
-	);
-	Mat4	model = mat4_mul(bodyPart.base, bodyPart.shape);
-	return mat4_mul(mat4_mul(proj, view), model);
-}
-
 void	Application::updateCameraDirection()
 {
 	float	yawRadian = this->_yaw * DEG2RAD;
@@ -511,13 +504,15 @@ GLuint	Application::loadPPM(const std::string& path, int& width, int&height)
 
 void	Application::initBody()
 {
-	this->_body.torso.base = mat4_identity();
+	this->_body.torso.local = mat4_identity();
 	this->_body.torso.shape = mat4_scale(Vec3{1.0f, 6.0f, 4.0f});
 	this->_body.torso.colour = Colour(1.0f, 0.0f, 0.0f);
 	this->_body.torso.tex = TextureType::Unicorn;
 
-	this->_body.head.base = mat4_identity();
 	this->_body.head.shape = mat4_scale(Vec3{2.0f, 2.0f, 2.0f});
+	float torsoHalf = this->_body.torso.shape.m[5] * 0.5f;
+	float headHalf  = this->_body.head.shape.m[5]  * 0.5f;
+	this->_body.head.local = translate(0.0f, torsoHalf + headHalf, 0.0f);
 	this->_body.head.colour = Colour(0.0f, 1.0f, 0.0f);
 	this->_body.head.tex = TextureType::Dirt;
 }

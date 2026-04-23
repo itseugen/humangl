@@ -23,7 +23,7 @@ enum class TextureType
 
 struct BodyPart
 {
-	Mat4 base;
+	Mat4 local; // Position relative to parent (or world if root)
 	Mat4 shape;
 	Colour colour;
 	TextureType tex;
@@ -75,8 +75,7 @@ struct Application
 	Mat4&		top();
 	const Mat4&	top() const;
 	
-	void	drawCube(const Mat4& mvp, const Colour& colour, TextureType tex);
-	Mat4	calcMVP(const BodyPart& bodyPart);
+	void	draw(const BodyPart& bodyPart, const Mat4& world);
 
 	std::unordered_map<TextureType, GLuint>	_textures;
 
