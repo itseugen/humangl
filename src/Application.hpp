@@ -23,8 +23,9 @@ enum class TextureType
 
 struct BodyPart
 {
+	Vec3 size; // To not always access the matrix of shape
 	Mat4 local; // Position relative to parent (or world if root)
-	Mat4 shape;
+	Mat4 shape; // stays for now to save calculations but could be replaced with a Vec3 size and a mat4_scale in the draw function
 	Colour colour;
 	TextureType tex;
 };
@@ -33,6 +34,7 @@ struct Body
 {
 	BodyPart	torso;
 	BodyPart	head;
+	BodyPart	upperLeftArm;
 };
 
 struct Application

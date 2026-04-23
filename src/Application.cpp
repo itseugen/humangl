@@ -504,15 +504,35 @@ GLuint	Application::loadPPM(const std::string& path, int& width, int&height)
 
 void	Application::initBody()
 {
+	/* TORSO */
 	this->_body.torso.local = mat4_identity();
 	this->_body.torso.shape = mat4_scale(Vec3{1.0f, 6.0f, 4.0f});
+	this->_body.torso.size = Vec3{1.0f, 6.0f, 4.0f};
 	this->_body.torso.colour = Colour(1.0f, 0.0f, 0.0f);
 	this->_body.torso.tex = TextureType::Unicorn;
 
+	/* HEAD */
 	this->_body.head.shape = mat4_scale(Vec3{2.0f, 2.0f, 2.0f});
-	float torsoHalf = this->_body.torso.shape.m[5] * 0.5f;
-	float headHalf  = this->_body.head.shape.m[5]  * 0.5f;
+	this->_body.head.size = Vec3{2.0f, 2.0f, 2.0f};
+	// Move or add this function to either the draw function or to a resize function to avoid having it hardcoded here (changing parent size)
+	float torsoHalf = this->_body.torso.size.y * 0.5f;
+	float headHalf  = this->_body.head.size.y * 0.5f;
 	this->_body.head.local = translate(0.0f, torsoHalf + headHalf, 0.0f);
 	this->_body.head.colour = Colour(0.0f, 1.0f, 0.0f);
 	this->_body.head.tex = TextureType::Dirt;
+
+	/* UPPER LEFT ARM */
+	this->_body.upperLeftArm.shape = mat4_scale(Vec3{1.0f, 4.0f, 1.0f});
+	this->_body.upperLeftArm.size = Vec3{1.0f, 4.0f, 1.0f};
+	float armHalfY = this->_body.upperLeftArm.size.y * 0.5f;
+	float armHalfX = this->_body.upperLeftArm.size.x * 0.5f;
+	float armHalfZ = this->_body.upperLeftArm.size.z * 0.5f;
+	Vec3 torsoShoulderLeft = Vec3{
+		armHalfX,
+		this->_body.torso.size.y * 0.5f, 
+		this->_body.torso.size.z * 0.5f + armHalfZ
+	};
+	this->_body.upperLeftArm.local = translate(torsoShoulderLeft.x, torsoShoulderLeft.y, torsoShoulderLeft.z) * translate(-armHalfX, -armHalfY, 0.0f);
+	this->_body.upperLeftArm.colour = Colour(1.0f, 0.0f, 0.0f);
+	this->_body.upperLeftArm.tex = TextureType::None;
 }
