@@ -37,6 +37,7 @@ struct Body
 	BodyPart	head;
 	BodyPart	upperLeftArm;
 	BodyPart	upperRightArm;
+	BodyPart	lowerLeftArm;
 };
 
 struct Application
@@ -90,15 +91,17 @@ struct Application
 		GLint	_colLoc;
 		GLint	_useTextureLoc;
 		GLint	_texLoc;
+		std::vector<Mat4>	_stack;
 		bool	_mouseActive = false;
-		static void	keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
-		static void	mouseCallback(GLFWwindow* window, double xpos, double ypos);
+		float	_moveSpeed = 1.5f;
 		static constexpr float	DEG2RAD = 3.14159265f / 180.0f;
 		static constexpr float	DEG2RADFOV = 45.0f * DEG2RAD;
+
 		void	updateCameraDirection();
+		static void	keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+		static void	mouseCallback(GLFWwindow* window, double xpos, double ypos);
 		GLuint	loadPPM(const std::string& path, int& width, int&height);
 		void	initBody();
-			std::vector<Mat4>	_stack;
 };
 
 GLuint compileShader(GLenum type, const char* src);

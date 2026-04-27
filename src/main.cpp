@@ -45,6 +45,11 @@ int main()
 		Mat4 armNod = applyJointRoation(app._body.upperLeftArm, nod(now -0.5f, 0.5f));
 		app.push(app.top() * app._body.upperLeftArm.local * armNod);
 		app.draw(app._body.upperLeftArm, app.top());
+
+		armNod = applyJointRoation(app._body.lowerLeftArm, nod(now -1.0f, 0.75f));
+		app.push(app.top() * app._body.lowerLeftArm.local * armNod);
+		app.draw(app._body.lowerLeftArm, app.top());
+		app.pop(); // lower left arm
 		app.pop(); // upper left arm
 
 		armNod = applyJointRoation(app._body.upperRightArm, nod(now -0.75f, 0.5f));

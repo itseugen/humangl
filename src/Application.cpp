@@ -320,7 +320,7 @@ void	Application::draw(const BodyPart& bodyPart, const Mat4& world)
  */
 void	Application::keybinds()
 {
-	float	speed = 1.5f * this->_dt; // Adjust speed based on frame time
+	float	speed = this->_moveSpeed * this->_dt; // Adjust speed based on frame time
 	float	rotSpeed = 40.0f * this->_dt;
 	Vec3 right = norm(cross(this->_cameraFront, this->_cameraUp));
 	if (glfwGetKey(_win, GLFW_KEY_W) == GLFW_PRESS)
@@ -434,6 +434,15 @@ void	Application::keyCallback(GLFWwindow* window, int key, int scancode, int act
 			app->_mouseActive = false;
 		}
 	}
+	if (key == GLFW_KEY_LEFT_SHIFT && action == GLFW_PRESS)
+	{
+		app->_moveSpeed *= 2.0f;
+	}
+	if (key == GLFW_KEY_LEFT_SHIFT && action == GLFW_RELEASE)
+	{
+		app->_moveSpeed *= 0.5f;
+	}
+
 }
 
 void	Application::updateCameraDirection()
@@ -506,15 +515,15 @@ void	Application::initBody()
 {
 	/* TORSO */
 	this->_body.torso.local = mat4_identity();
-	this->_body.torso.shape = mat4_scale(Vec3{1.0f, 6.0f, 4.0f});
 	this->_body.torso.size = Vec3{1.0f, 6.0f, 4.0f};
+	this->_body.torso.shape = mat4_scale(this->_body.torso.size);
 	this->_body.torso.jointPivot = Vec3{0.0f, 0.0f, 0.0f};
 	this->_body.torso.colour = Colour(1.0f, 0.0f, 0.0f);
 	this->_body.torso.tex = TextureType::Unicorn;
 
 	/* HEAD */
-	this->_body.head.shape = mat4_scale(Vec3{2.0f, 2.0f, 2.0f});
 	this->_body.head.size = Vec3{2.0f, 2.0f, 2.0f};
+	this->_body.head.shape = mat4_scale(this->_body.head.size);
 	// Move or add this function to either the draw function or to a resize function to avoid having it hardcoded here (changing parent size)
 	float torsoHalf = this->_body.torso.size.y * 0.5f;
 	float headHalf  = this->_body.head.size.y * 0.5f;
@@ -524,8 +533,8 @@ void	Application::initBody()
 	this->_body.head.tex = TextureType::Dirt;
 
 	/* UPPER LEFT ARM */
-	this->_body.upperLeftArm.shape = mat4_scale(Vec3{1.0f, 3.5f, 1.0f});
 	this->_body.upperLeftArm.size = Vec3{1.0f, 3.5f, 1.0f};
+	this->_body.upperLeftArm.shape = mat4_scale(this->_body.upperLeftArm.size);
 	float armHalfY = this->_body.upperLeftArm.size.y * 0.5f;
 	float armHalfX = this->_body.upperLeftArm.size.x * 0.5f;
 	float armHalfZ = this->_body.upperLeftArm.size.z * 0.5f;
@@ -540,8 +549,8 @@ void	Application::initBody()
 	this->_body.upperLeftArm.jointPivot = Vec3{0.0f, armHalfY, 0.0f};
 
 	/* UPPER RIGHT ARM */
-	this->_body.upperRightArm.shape = mat4_scale(Vec3{1.0f, 3.5f, 1.0f});
 	this->_body.upperRightArm.size = Vec3{1.0f, 3.5f, 1.0f};
+	this->_body.upperRightArm.shape = mat4_scale(this->_body.upperRightArm.size);
 	armHalfY = this->_body.upperRightArm.size.y * 0.5f;
 	armHalfX = this->_body.upperRightArm.size.x * 0.5f;
 	armHalfZ = this->_body.upperRightArm.size.z * 0.5f;
@@ -554,4 +563,20 @@ void	Application::initBody()
 	this->_body.upperRightArm.colour = Colour(1.0f, 0.0f, 0.0f);
 	this->_body.upperRightArm.tex = TextureType::None;
 	this->_body.upperRightArm.jointPivot = Vec3{0.0f, armHalfY, 0.0f};
+
+	/* LOWER LEFT ARM */
+	this->_body.lowerLeftArm.size = Vec3{1.0f, 3.0f, 1.0f};
+	this->_body.lowerLeftArm.shape = mat4_scale(this->_body.lowerLeftArm.size);
+	armHalfY = this->_body.lowerLeftArm.size.y * 0.5f;
+	armHalfX = this->_body.lowerLeftArm.size.x * 0.5f;
+	armHalfZ = this->_body.lowerLeftArm.size.z * 0.5f;
+	Vec3 elbowLeft = Vec3{
+		armHalfX,
+		-this->_body.upperLeftArm.size.y * 0.5f,
+		0.0f
+	};
+	this->_body.lowerLeftArm.local = translate(elbowLeft) * translate(-armHalfX, -armHalfY, 0.0f);
+	this->_body.lowerLeftArm.colour = Colour(1.0f, 0.4f, 0.0f);
+	this->_body.lowerLeftArm.tex = TextureType::None;
+	this->_body.lowerLeftArm.jointPivot = Vec3{0.0f, armHalfY, 0.0f};
 }
