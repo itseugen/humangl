@@ -436,11 +436,11 @@ void	Application::keyCallback(GLFWwindow* window, int key, int scancode, int act
 	}
 	if (key == GLFW_KEY_LEFT_SHIFT && action == GLFW_PRESS)
 	{
-		app->_moveSpeed *= 2.0f;
+		app->_moveSpeed *= 4.0f;
 	}
 	if (key == GLFW_KEY_LEFT_SHIFT && action == GLFW_RELEASE)
 	{
-		app->_moveSpeed *= 0.5f;
+		app->_moveSpeed *= 0.25f;
 	}
 
 }
