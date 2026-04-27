@@ -38,6 +38,7 @@ struct Body
 	BodyPart	upperLeftArm;
 	BodyPart	upperRightArm;
 	BodyPart	lowerLeftArm;
+	BodyPart	lowerRightArm;
 };
 
 struct Application

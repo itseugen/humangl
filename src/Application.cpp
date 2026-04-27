@@ -579,4 +579,21 @@ void	Application::initBody()
 	this->_body.lowerLeftArm.colour = Colour(1.0f, 0.4f, 0.0f);
 	this->_body.lowerLeftArm.tex = TextureType::None;
 	this->_body.lowerLeftArm.jointPivot = Vec3{0.0f, armHalfY, 0.0f};
+
+	/* LOWER RIGHT ARM */
+	this->_body.lowerRightArm.size = Vec3{1.0f, 3.0f, 1.0f};
+	this->_body.lowerRightArm.shape = mat4_scale(this->_body.lowerRightArm.size);
+	armHalfY = this->_body.lowerRightArm.size.y * 0.5f;
+	armHalfX = this->_body.lowerRightArm.size.x * 0.5f;
+	armHalfZ = this->_body.lowerRightArm.size.z * 0.5f;
+	Vec3 elbowRight = Vec3{
+		armHalfX,
+		-this->_body.upperRightArm.size.y * 0.5f,
+		0.0f
+	};
+	this->_body.lowerRightArm.local = translate(elbowRight) * translate(-armHalfX, -armHalfY, 0.0f);
+	this->_body.lowerRightArm.colour = Colour(1.0f, 0.4f, 0.0f);
+	this->_body.lowerRightArm.tex = TextureType::None;
+	this->_body.lowerRightArm.jointPivot = Vec3{0.0f, armHalfY, 0.0f};
+
 }

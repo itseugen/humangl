@@ -55,6 +55,11 @@ int main()
 		armNod = applyJointRoation(app._body.upperRightArm, nod(now -0.75f, 0.5f));
 		app.push(app.top() * app._body.upperRightArm.local * armNod);
 		app.draw(app._body.upperRightArm, app.top());
+
+		armNod = applyJointRoation(app._body.lowerRightArm, nod(now -1.25f, 0.75f));
+		app.push(app.top() * app._body.lowerRightArm.local * armNod);
+		app.draw(app._body.lowerRightArm, app.top());
+		app.pop(); // lower right arm
 		app.pop(); // upper right arm
 		app.pop(); // torso
 		app.pop(); // identity
