@@ -522,7 +522,7 @@ void	Application::initBody()
 	this->_body.torso.tex = TextureType::Unicorn;
 
 	/* HEAD */
-	this->_body.head.size = Vec3{2.0f, 2.0f, 2.0f};
+	this->_body.head.size = Vec3{2.5f, 2.5f, 2.5f};
 	this->_body.head.shape = mat4_scale(this->_body.head.size);
 	// Move or add this function to either the draw function or to a resize function to avoid having it hardcoded here (changing parent size)
 	float torsoHalf = this->_body.torso.size.y * 0.5f;
@@ -597,7 +597,7 @@ void	Application::initBody()
 	this->_body.lowerRightArm.jointPivot = Vec3{0.0f, armHalfY, 0.0f};
 
 	/* UPPER LEFT LEG */
-	this->_body.upperLeftLeg.size = Vec3{1.0f, 4.0f, 2.0f};
+	this->_body.upperLeftLeg.size = Vec3{1.0f, 3.5f, 2.0f};
 	this->_body.upperLeftLeg.shape = mat4_scale(this->_body.upperLeftLeg.size);
 	float legHalfX = this->_body.upperLeftLeg.size.x * 0.5f;
 	float legHalfY = this->_body.upperLeftLeg.size.y * 0.5f;
@@ -613,7 +613,7 @@ void	Application::initBody()
 	this->_body.upperLeftLeg.jointPivot = Vec3{0.0f, legHalfY, 0.0f};
 
 	/* UPPER RIGHT LEG */
-	this->_body.upperRightLeg.size = Vec3{1.0f, 4.0f, 2.0f};
+	this->_body.upperRightLeg.size = Vec3{1.0f, 3.5f, 2.0f};
 	this->_body.upperRightLeg.shape = mat4_scale(this->_body.upperRightLeg.size);
 	legHalfX = this->_body.upperRightLeg.size.x * 0.5f;
 	legHalfY = this->_body.upperRightLeg.size.y * 0.5f;
@@ -627,4 +627,36 @@ void	Application::initBody()
 	this->_body.upperRightLeg.colour = Colour(0.0f, 0.0f, 1.0f);
 	this->_body.upperRightLeg.tex = TextureType::Unicorn;
 	this->_body.upperRightLeg.jointPivot = Vec3{0.0f, legHalfY, 0.0f};
+
+	/* LOWER LEFT LEG */
+	this->_body.lowerLeftLeg.size = Vec3{1.0f, 3.5f, 2.0f};
+	this->_body.lowerLeftLeg.shape = mat4_scale(this->_body.lowerLeftLeg.size);
+	legHalfX = this->_body.lowerLeftLeg.size.x * 0.5f;
+	legHalfY = this->_body.lowerLeftLeg.size.y * 0.5f;
+	legHalfZ = this->_body.lowerLeftLeg.size.z * 0.5f;
+	Vec3 kneeLeft = Vec3{
+		legHalfX,
+		-this->_body.upperLeftLeg.size.y * 0.5f,
+		0.0f
+	};
+	this->_body.lowerLeftLeg.local = translate(kneeLeft) * translate(-legHalfX, -legHalfY, 0.0f);
+	this->_body.lowerLeftLeg.colour = Colour(0.0f, 0.0f, 1.0f);
+	this->_body.lowerLeftLeg.tex = TextureType::Unicorn;
+	this->_body.lowerLeftLeg.jointPivot = Vec3{0.0f, legHalfY, 0.0f};
+
+	/* LOWER RIGHT LEG */
+	this->_body.lowerRightLeg.size = Vec3{1.0f, 3.5f, 2.0f};
+	this->_body.lowerRightLeg.shape = mat4_scale(this->_body.lowerRightLeg.size);
+	legHalfX = this->_body.lowerRightLeg.size.x * 0.5f;
+	legHalfY = this->_body.lowerRightLeg.size.y * 0.5f;
+	legHalfZ = this->_body.lowerRightLeg.size.z * 0.5f;
+	Vec3 kneeRight = Vec3{
+		legHalfX,
+		-this->_body.upperRightLeg.size.y * 0.5f,
+		0.0f
+	};
+	this->_body.lowerRightLeg.local = translate(kneeRight) * translate(-legHalfX, -legHalfY, 0.0f);
+	this->_body.lowerRightLeg.colour = Colour(0.0f, 0.0f, 1.0f);
+	this->_body.lowerRightLeg.tex = TextureType::Dirt;
+	this->_body.lowerRightLeg.jointPivot = Vec3{0.0f, legHalfY, 0.0f};
 }

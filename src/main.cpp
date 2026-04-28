@@ -64,11 +64,20 @@ int main()
 		Mat4 legNod = applyJointRoation(app._body.upperLeftLeg, nod(now -1.0f, 0.5f));
 		app.push(app.top() * app._body.upperLeftLeg.local * legNod);
 		app.draw(app._body.upperLeftLeg, app.top());
+
+		legNod = applyJointRoation(app._body.lowerLeftLeg, nod(now -1.5f, 0.75f));
+		app.push(app.top() * app._body.lowerLeftLeg.local * legNod);
+		app.draw(app._body.lowerLeftLeg, app.top());
+		app.pop(); // lower left leg
 		app.pop(); // upper left leg
 
 		legNod = applyJointRoation(app._body.upperRightLeg, nod(now -1.5f, 0.5f));
 		app.push(app.top() * app._body.upperRightLeg.local * legNod);
 		app.draw(app._body.upperRightLeg, app.top());
+
+		app.push(app.top() * app._body.lowerRightLeg.local);
+		app.draw(app._body.lowerRightLeg, app.top());
+		app.pop(); // lower right leg
 		app.pop(); // upper right leg
 		app.pop(); // torso
 		app.pop(); // identity
