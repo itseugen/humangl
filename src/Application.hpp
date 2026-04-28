@@ -21,6 +21,12 @@ enum class TextureType
 	Dirt,
 };
 
+enum class FullBodyAnimation
+{
+	None,
+	Walk,
+};
+
 struct BodyPart
 {
 	Mat4 local; // Position relative to parent (or world if root)
@@ -48,6 +54,10 @@ struct Body
 
 struct Application
 {
+	
+	Application();
+	~Application();
+
 	GLFWwindow*	_win = nullptr;
 
 	GLuint	_VAO = 0;
@@ -72,9 +82,12 @@ struct Application
 	Vec3 _cameraFront = {0, 0, -1};
 	Vec3 _cameraUp = {0, 1, 0};
 	Vec3 _cameraPosition = {-6.0f, 2.0f, 14.0f};
+	
+	std::unordered_map<TextureType, GLuint>	_textures;
 
-	Application();
-	~Application();
+	FullBodyAnimation	_animation = FullBodyAnimation::None;
+	
+	Body	_body;
 
 	void	initWindow();
 	int		setupBuffers();
@@ -88,10 +101,6 @@ struct Application
 	
 	void	draw(const BodyPart& bodyPart, const Mat4& world);
 	void	resizeBody();
-
-	std::unordered_map<TextureType, GLuint>	_textures;
-
-	Body	_body;
 
 	private:
 		GLuint	_mpvLoc;
