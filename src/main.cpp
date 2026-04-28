@@ -27,24 +27,16 @@ int main()
 		// Cloar buffer
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		static float posX = 0.0f;
-		posX -= 0.5f * app._dt;
-
-		// If I want to rotate stuff
-		angle += 4.0f * app._dt;
-		if (angle >= 360.0f) angle -= 360.0f;
 		app.push(mat4_identity());
-		app.push(app.top() * translate(posX, 0.0f, 0.0f) * app._body.torso.local); // Not necessary to push the identity but it shows how the stack works
+		app.push(app.top() * app._body.torso.local); // Not necessary to push the identity but it shows how the stack works
 
 		app.draw(app._body.torso, app.top());
 
-		Mat4 headNod = applyJointRoation(app._body.head, nod(now, 1.5f));
-		app.push(app.top() * app._body.head.local * headNod);
+		app.push(app.top() * app._body.head.local);
 		app.draw(app._body.head, app.top());
 		app.pop(); // head
 
-		Mat4 armNod = applyJointRoation(app._body.upperLeftArm, nod(now -0.5f, 0.5f));
-		app.push(app.top() * app._body.upperLeftArm.local * armNod);
+		app.push(app.top() * app._body.upperLeftArm.local);
 		app.draw(app._body.upperLeftArm, app.top());
 
 		app.push(app.top() * app._body.lowerLeftArm.local);
@@ -52,28 +44,23 @@ int main()
 		app.pop(); // lower left arm
 		app.pop(); // upper left arm
 
-		armNod = applyJointRoation(app._body.upperRightArm, nod(now -0.75f, 0.5f));
-		app.push(app.top() * app._body.upperRightArm.local * armNod);
+		app.push(app.top() * app._body.upperRightArm.local);
 		app.draw(app._body.upperRightArm, app.top());
 
-		armNod = applyJointRoation(app._body.lowerRightArm, nod(now -1.25f, 0.75f));
-		app.push(app.top() * app._body.lowerRightArm.local * armNod);
+		app.push(app.top() * app._body.lowerRightArm.local);
 		app.draw(app._body.lowerRightArm, app.top());
 		app.pop(); // lower right arm
 		app.pop(); // upper right arm
 
-		Mat4 legNod = applyJointRoation(app._body.upperLeftLeg, nod(now -1.0f, 0.5f));
-		app.push(app.top() * app._body.upperLeftLeg.local * legNod);
+		app.push(app.top() * app._body.upperLeftLeg.local);
 		app.draw(app._body.upperLeftLeg, app.top());
 
-		legNod = applyJointRoation(app._body.lowerLeftLeg, nod(now -1.5f, 0.75f));
-		app.push(app.top() * app._body.lowerLeftLeg.local * legNod);
+		app.push(app.top() * app._body.lowerLeftLeg.local);
 		app.draw(app._body.lowerLeftLeg, app.top());
 		app.pop(); // lower left leg
 		app.pop(); // upper left leg
 
-		legNod = applyJointRoation(app._body.upperRightLeg, nod(now -1.5f, 0.5f));
-		app.push(app.top() * app._body.upperRightLeg.local * legNod);
+		app.push(app.top() * app._body.upperRightLeg.local);
 		app.draw(app._body.upperRightLeg, app.top());
 
 		app.push(app.top() * app._body.lowerRightLeg.local);

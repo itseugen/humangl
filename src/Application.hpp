@@ -23,13 +23,12 @@ enum class TextureType
 
 struct BodyPart
 {
-	Vec3 size; // To not always access the matrix of shape
 	Mat4 local; // Position relative to parent (or world if root)
 	Mat4 shape; // stays for now to save calculations but could be replaced with a Vec3 size and a mat4_scale in the draw function
-	Vec3 jointPivot;
+	Vec3 size; // To not always access the matrix of shape
+	Vec3 jointPivot; // The point around the joint rotates (always the joint connecting it to its parent)
 	Colour colour = Colour(1.0f, 1.0f, 1.0f);
 	TextureType tex = TextureType::None;
-
 	Mat4 animation = mat4_identity();
 };
 
