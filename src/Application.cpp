@@ -517,53 +517,53 @@ void	Application::initBody()
 	this->_body.torso.local = mat4_identity();
 	this->_body.torso.size = Vec3{1.0f, 6.0f, 4.0f};
 	this->_body.torso.jointPivot = Vec3{0.0f, 0.0f, 0.0f};
-	this->_body.torso.colour = Colour(1.0f, 0.0f, 0.0f);
-	this->_body.torso.tex = TextureType::Unicorn;
+	this->_body.torso.colour = Colour(0.0118f, 0.4f, 0.0118f);
+	this->_body.torso.tex = TextureType::None;
 
 	/* HEAD */
 	this->_body.head.size = Vec3{2.5f, 2.5f, 2.5f};
-	this->_body.head.colour = Colour(0.0f, 1.0f, 0.0f);
-	this->_body.head.tex = TextureType::Dirt;
+	this->_body.head.colour = Colour(0.8784f, 0.6706f, 0.5804f);
+	this->_body.head.tex = TextureType::None;
 
 	/* UPPER LEFT ARM */
 	this->_body.upperLeftArm.size = Vec3{1.0f, 3.5f, 1.0f};
-	this->_body.upperLeftArm.colour = Colour(1.0f, 0.0f, 0.0f);
+	this->_body.upperLeftArm.colour = Colour(0.8784f, 0.6706f, 0.5804f);
 	this->_body.upperLeftArm.tex = TextureType::None;
 
 	/* UPPER RIGHT ARM */
 	this->_body.upperRightArm.size = Vec3{1.0f, 3.5f, 1.0f};
-	this->_body.upperRightArm.colour = Colour(1.0f, 0.0f, 0.0f);
+	this->_body.upperRightArm.colour = Colour(0.8784f, 0.6706f, 0.5804f);
 	this->_body.upperRightArm.tex = TextureType::None;
 
 	/* LOWER LEFT ARM */
 	this->_body.lowerLeftArm.size = Vec3{1.0f, 3.0f, 1.0f};
-	this->_body.lowerLeftArm.colour = Colour(1.0f, 0.4f, 0.0f);
+	this->_body.lowerLeftArm.colour = Colour(0.8784f, 0.6706f, 0.5804f);
 	this->_body.lowerLeftArm.tex = TextureType::None;
 
 	/* LOWER RIGHT ARM */
 	this->_body.lowerRightArm.size = Vec3{1.0f, 3.0f, 1.0f};
-	this->_body.lowerRightArm.colour = Colour(1.0f, 0.4f, 0.0f);
+	this->_body.lowerRightArm.colour = Colour(0.8784f, 0.6706f, 0.5804f);
 	this->_body.lowerRightArm.tex = TextureType::None;
 
 	/* UPPER LEFT LEG */
 	this->_body.upperLeftLeg.size = Vec3{1.0f, 3.5f, 2.0f};
-	this->_body.upperLeftLeg.colour = Colour(0.0f, 0.0f, 1.0f);
-	this->_body.upperLeftLeg.tex = TextureType::Dirt;
+	this->_body.upperLeftLeg.colour = Colour(0.0118f, 0.2980f, 0.6f);
+	this->_body.upperLeftLeg.tex = TextureType::None;
 
 	/* UPPER RIGHT LEG */
 	this->_body.upperRightLeg.size = Vec3{1.0f, 3.5f, 2.0f};
-	this->_body.upperRightLeg.colour = Colour(0.0f, 0.0f, 1.0f);
-	this->_body.upperRightLeg.tex = TextureType::Unicorn;
+	this->_body.upperRightLeg.colour = Colour(0.0118f, 0.2980f, 0.6f);
+	this->_body.upperRightLeg.tex = TextureType::None;
 
 	/* LOWER LEFT LEG */
 	this->_body.lowerLeftLeg.size = Vec3{1.0f, 3.5f, 2.0f};
-	this->_body.lowerLeftLeg.colour = Colour(0.0f, 0.0f, 1.0f);
-	this->_body.lowerLeftLeg.tex = TextureType::Unicorn;
+	this->_body.lowerLeftLeg.colour = Colour(0.0118f, 0.2980f, 0.6f);
+	this->_body.lowerLeftLeg.tex = TextureType::None;
 
 	/* LOWER RIGHT LEG */
 	this->_body.lowerRightLeg.size = Vec3{1.0f, 3.5f, 2.0f};
-	this->_body.lowerRightLeg.colour = Colour(0.0f, 0.0f, 1.0f);
-	this->_body.lowerRightLeg.tex = TextureType::Dirt;
+	this->_body.lowerRightLeg.colour = Colour(0.0118f, 0.2980f, 0.6f);
+	this->_body.lowerRightLeg.tex = TextureType::None;
 
 	this->resizeBody();
 }
