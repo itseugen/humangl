@@ -516,147 +516,171 @@ void	Application::initBody()
 	/* TORSO */
 	this->_body.torso.local = mat4_identity();
 	this->_body.torso.size = Vec3{1.0f, 6.0f, 4.0f};
-	this->_body.torso.shape = mat4_scale(this->_body.torso.size);
 	this->_body.torso.jointPivot = Vec3{0.0f, 0.0f, 0.0f};
 	this->_body.torso.colour = Colour(1.0f, 0.0f, 0.0f);
 	this->_body.torso.tex = TextureType::Unicorn;
 
 	/* HEAD */
 	this->_body.head.size = Vec3{2.5f, 2.5f, 2.5f};
-	this->_body.head.shape = mat4_scale(this->_body.head.size);
-	// Move or add this function to either the draw function or to a resize function to avoid having it hardcoded here (changing parent size)
-	float torsoHalf = this->_body.torso.size.y * 0.5f;
-	float headHalf  = this->_body.head.size.y * 0.5f;
-	this->_body.head.local = translate(0.0f, torsoHalf + headHalf, 0.0f);
-	this->_body.head.jointPivot = Vec3{0.0f, -headHalf, 0.0f};
 	this->_body.head.colour = Colour(0.0f, 1.0f, 0.0f);
 	this->_body.head.tex = TextureType::Dirt;
 
 	/* UPPER LEFT ARM */
 	this->_body.upperLeftArm.size = Vec3{1.0f, 3.5f, 1.0f};
-	this->_body.upperLeftArm.shape = mat4_scale(this->_body.upperLeftArm.size);
-	float armHalfY = this->_body.upperLeftArm.size.y * 0.5f;
-	float armHalfX = this->_body.upperLeftArm.size.x * 0.5f;
-	float armHalfZ = this->_body.upperLeftArm.size.z * 0.5f;
-	Vec3 torsoShoulderLeft = Vec3{
-		armHalfX,
-		this->_body.torso.size.y * 0.5f, 
-		this->_body.torso.size.z * 0.5f + armHalfZ
-	};
-	this->_body.upperLeftArm.local = translate(torsoShoulderLeft) * translate(-armHalfX, -armHalfY, 0.0f);
 	this->_body.upperLeftArm.colour = Colour(1.0f, 0.0f, 0.0f);
 	this->_body.upperLeftArm.tex = TextureType::None;
-	this->_body.upperLeftArm.jointPivot = Vec3{0.0f, armHalfY, 0.0f};
 
 	/* UPPER RIGHT ARM */
 	this->_body.upperRightArm.size = Vec3{1.0f, 3.5f, 1.0f};
-	this->_body.upperRightArm.shape = mat4_scale(this->_body.upperRightArm.size);
-	armHalfY = this->_body.upperRightArm.size.y * 0.5f;
-	armHalfX = this->_body.upperRightArm.size.x * 0.5f;
-	armHalfZ = this->_body.upperRightArm.size.z * 0.5f;
-	Vec3 torsoShoulderRight = Vec3{
-		armHalfX,
-		this->_body.torso.size.y * 0.5f, 
-		-(this->_body.torso.size.z * 0.5f + armHalfZ)
-	};
-	this->_body.upperRightArm.local = translate(torsoShoulderRight) * translate(-armHalfX, -armHalfY, 0.0f);
 	this->_body.upperRightArm.colour = Colour(1.0f, 0.0f, 0.0f);
 	this->_body.upperRightArm.tex = TextureType::None;
-	this->_body.upperRightArm.jointPivot = Vec3{0.0f, armHalfY, 0.0f};
 
 	/* LOWER LEFT ARM */
 	this->_body.lowerLeftArm.size = Vec3{1.0f, 3.0f, 1.0f};
-	this->_body.lowerLeftArm.shape = mat4_scale(this->_body.lowerLeftArm.size);
-	armHalfY = this->_body.lowerLeftArm.size.y * 0.5f;
-	armHalfX = this->_body.lowerLeftArm.size.x * 0.5f;
-	armHalfZ = this->_body.lowerLeftArm.size.z * 0.5f;
-	Vec3 elbowLeft = Vec3{
-		armHalfX,
-		-this->_body.upperLeftArm.size.y * 0.5f,
-		0.0f
-	};
-	this->_body.lowerLeftArm.local = translate(elbowLeft) * translate(-armHalfX, -armHalfY, 0.0f);
 	this->_body.lowerLeftArm.colour = Colour(1.0f, 0.4f, 0.0f);
 	this->_body.lowerLeftArm.tex = TextureType::None;
-	this->_body.lowerLeftArm.jointPivot = Vec3{0.0f, armHalfY, 0.0f};
 
 	/* LOWER RIGHT ARM */
 	this->_body.lowerRightArm.size = Vec3{1.0f, 3.0f, 1.0f};
-	this->_body.lowerRightArm.shape = mat4_scale(this->_body.lowerRightArm.size);
-	armHalfY = this->_body.lowerRightArm.size.y * 0.5f;
-	armHalfX = this->_body.lowerRightArm.size.x * 0.5f;
-	armHalfZ = this->_body.lowerRightArm.size.z * 0.5f;
-	Vec3 elbowRight = Vec3{
-		armHalfX,
-		-this->_body.upperRightArm.size.y * 0.5f,
-		0.0f
-	};
-	this->_body.lowerRightArm.local = translate(elbowRight) * translate(-armHalfX, -armHalfY, 0.0f);
 	this->_body.lowerRightArm.colour = Colour(1.0f, 0.4f, 0.0f);
 	this->_body.lowerRightArm.tex = TextureType::None;
-	this->_body.lowerRightArm.jointPivot = Vec3{0.0f, armHalfY, 0.0f};
 
 	/* UPPER LEFT LEG */
 	this->_body.upperLeftLeg.size = Vec3{1.0f, 3.5f, 2.0f};
-	this->_body.upperLeftLeg.shape = mat4_scale(this->_body.upperLeftLeg.size);
-	float legHalfX = this->_body.upperLeftLeg.size.x * 0.5f;
-	float legHalfY = this->_body.upperLeftLeg.size.y * 0.5f;
-	float legHalfZ = this->_body.upperLeftLeg.size.z * 0.5f;
-	Vec3 hipLeft = Vec3{
-		legHalfX,
-		-this->_body.torso.size.y * 0.5f,
-		this->_body.torso.size.z * 0.5f - legHalfZ
-	};
-	this->_body.upperLeftLeg.local = translate(hipLeft) * translate(-legHalfX, -legHalfY, 0.0f);
 	this->_body.upperLeftLeg.colour = Colour(0.0f, 0.0f, 1.0f);
 	this->_body.upperLeftLeg.tex = TextureType::Dirt;
-	this->_body.upperLeftLeg.jointPivot = Vec3{0.0f, legHalfY, 0.0f};
 
 	/* UPPER RIGHT LEG */
 	this->_body.upperRightLeg.size = Vec3{1.0f, 3.5f, 2.0f};
-	this->_body.upperRightLeg.shape = mat4_scale(this->_body.upperRightLeg.size);
-	legHalfX = this->_body.upperRightLeg.size.x * 0.5f;
-	legHalfY = this->_body.upperRightLeg.size.y * 0.5f;
-	legHalfZ = this->_body.upperRightLeg.size.z * 0.5f;
-	Vec3 hipRight = Vec3{
-		legHalfX,
-		-this->_body.torso.size.y * 0.5f,
-		-(this->_body.torso.size.z * 0.5f - legHalfZ)
-	};
-	this->_body.upperRightLeg.local = translate(hipRight) * translate(-legHalfX, -legHalfY, 0.0f);
 	this->_body.upperRightLeg.colour = Colour(0.0f, 0.0f, 1.0f);
 	this->_body.upperRightLeg.tex = TextureType::Unicorn;
-	this->_body.upperRightLeg.jointPivot = Vec3{0.0f, legHalfY, 0.0f};
 
 	/* LOWER LEFT LEG */
 	this->_body.lowerLeftLeg.size = Vec3{1.0f, 3.5f, 2.0f};
-	this->_body.lowerLeftLeg.shape = mat4_scale(this->_body.lowerLeftLeg.size);
-	legHalfX = this->_body.lowerLeftLeg.size.x * 0.5f;
-	legHalfY = this->_body.lowerLeftLeg.size.y * 0.5f;
-	legHalfZ = this->_body.lowerLeftLeg.size.z * 0.5f;
-	Vec3 kneeLeft = Vec3{
-		legHalfX,
-		-this->_body.upperLeftLeg.size.y * 0.5f,
-		0.0f
-	};
-	this->_body.lowerLeftLeg.local = translate(kneeLeft) * translate(-legHalfX, -legHalfY, 0.0f);
 	this->_body.lowerLeftLeg.colour = Colour(0.0f, 0.0f, 1.0f);
 	this->_body.lowerLeftLeg.tex = TextureType::Unicorn;
-	this->_body.lowerLeftLeg.jointPivot = Vec3{0.0f, legHalfY, 0.0f};
 
 	/* LOWER RIGHT LEG */
 	this->_body.lowerRightLeg.size = Vec3{1.0f, 3.5f, 2.0f};
+	this->_body.lowerRightLeg.colour = Colour(0.0f, 0.0f, 1.0f);
+	this->_body.lowerRightLeg.tex = TextureType::Dirt;
+
+	this->resizeBody();
+}
+
+void	Application::resizeBody()
+{
+	float halfX, halfY, halfZ;
+	/* TORSO */
+	this->_body.torso.shape = mat4_scale(this->_body.torso.size);
+
+	/* HEAD */
+	this->_body.head.shape = mat4_scale(this->_body.head.size);
+	halfY = this->_body.head.size.y * 0.5f;
+	this->_body.head.local = translate(0.0f, (this->_body.torso.size.y * 0.5f) + halfY, 0.0f);
+	this->_body.head.jointPivot = Vec3{0.0f, -halfY, 0.0f};
+
+	/* UPPER LEFT ARM */
+	this->_body.upperLeftArm.shape = mat4_scale(this->_body.upperLeftArm.size);
+	halfX = this->_body.upperLeftArm.size.x * 0.5f;
+	halfY = this->_body.upperLeftArm.size.y * 0.5f;
+	halfZ = this->_body.upperLeftArm.size.z * 0.5f;
+	Vec3 torsoShoulderLeft = Vec3{
+		halfX,
+		this->_body.torso.size.y * 0.5f, 
+		this->_body.torso.size.z * 0.5f + halfZ
+	};
+	this->_body.upperLeftArm.local = translate(torsoShoulderLeft) * translate(-halfX, -halfY, 0.0f);
+	this->_body.upperLeftArm.jointPivot = Vec3{0.0f, halfY, 0.0f};
+
+	/* UPPER RIGHT ARM */
+	this->_body.upperRightArm.shape = mat4_scale(this->_body.upperRightArm.size);
+	halfX = this->_body.upperRightArm.size.x * 0.5f;
+	halfY = this->_body.upperRightArm.size.y * 0.5f;
+	halfZ = this->_body.upperRightArm.size.z * 0.5f;
+	Vec3 torsoShoulderRight = Vec3{
+		halfX,
+		this->_body.torso.size.y * 0.5f, 
+		-(this->_body.torso.size.z * 0.5f + halfZ)
+	};
+	this->_body.upperRightArm.local = translate(torsoShoulderRight) * translate(-halfX, -halfY, 0.0f);
+	this->_body.upperRightArm.jointPivot = Vec3{0.0f, halfY, 0.0f};
+
+	/* LOWER LEFT ARM */
+	this->_body.lowerLeftArm.shape = mat4_scale(this->_body.lowerLeftArm.size);
+	halfX = this->_body.lowerLeftArm.size.x * 0.5f;
+	halfY = this->_body.lowerLeftArm.size.y * 0.5f;
+	halfZ = this->_body.lowerLeftArm.size.z * 0.5f;
+	Vec3 elbowLeft = Vec3{
+		halfX,
+		-this->_body.upperLeftArm.size.y * 0.5f,
+		0.0f
+	};
+	this->_body.lowerLeftArm.local = translate(elbowLeft) * translate(-halfX, -halfY, 0.0f);
+	this->_body.lowerLeftArm.jointPivot = Vec3{0.0f, halfY, 0.0f};
+
+	/* LOWER RIGHT ARM */
+	this->_body.lowerRightArm.shape = mat4_scale(this->_body.lowerRightArm.size);
+	halfX = this->_body.lowerRightArm.size.x * 0.5f;
+	halfY = this->_body.lowerRightArm.size.y * 0.5f;
+	halfZ = this->_body.lowerRightArm.size.z * 0.5f;
+	Vec3 elbowRight = Vec3{
+		halfX,
+		-this->_body.upperRightArm.size.y * 0.5f,
+		0.0f
+	};
+	this->_body.lowerRightArm.local = translate(elbowRight) * translate(-halfX, -halfY, 0.0f);
+	this->_body.lowerRightArm.jointPivot = Vec3{0.0f, halfY, 0.0f};
+
+	/* UPPER LEFT LEG */
+	this->_body.upperLeftLeg.shape = mat4_scale(this->_body.upperLeftLeg.size);
+	halfX = this->_body.upperLeftLeg.size.x * 0.5f;
+	halfY = this->_body.upperLeftLeg.size.y * 0.5f;
+	halfZ = this->_body.upperLeftLeg.size.z * 0.5f;
+	Vec3 hipLeft = Vec3{
+		halfX,
+		-this->_body.torso.size.y * 0.5f,
+		this->_body.torso.size.z * 0.5f - halfZ
+	};
+	this->_body.upperLeftLeg.local = translate(hipLeft) * translate(-halfX, -halfY, 0.0f);
+	this->_body.upperLeftLeg.jointPivot = Vec3{0.0f, halfY, 0.0f};
+
+	/* UPPER RIGHT LEG */
+	this->_body.upperRightLeg.shape = mat4_scale(this->_body.upperRightLeg.size);
+	halfX = this->_body.upperRightLeg.size.x * 0.5f;
+	halfY = this->_body.upperRightLeg.size.y * 0.5f;
+	halfZ = this->_body.upperRightLeg.size.z * 0.5f;
+	Vec3 hipRight = Vec3{
+		halfX,
+		-this->_body.torso.size.y * 0.5f,
+		-(this->_body.torso.size.z * 0.5f - halfZ)
+	};
+	this->_body.upperRightLeg.local = translate(hipRight) * translate(-halfX, -halfY, 0.0f);
+	this->_body.upperRightLeg.jointPivot = Vec3{0.0f, halfY, 0.0f};
+
+	/* LOWER LEFT LEG */
+	this->_body.lowerLeftLeg.shape = mat4_scale(this->_body.lowerLeftLeg.size);
+	halfX = this->_body.lowerLeftLeg.size.x * 0.5f;
+	halfY = this->_body.lowerLeftLeg.size.y * 0.5f;
+	halfZ = this->_body.lowerLeftLeg.size.z * 0.5f;
+	Vec3 kneeLeft = Vec3{
+		halfX,
+		-this->_body.upperLeftLeg.size.y * 0.5f,
+		0.0f
+	};
+	this->_body.lowerLeftLeg.local = translate(kneeLeft) * translate(-halfX, -halfY, 0.0f);
+	this->_body.lowerLeftLeg.jointPivot = Vec3{0.0f, halfY, 0.0f};
+
+	/* LOWER RIGHT LEG */
 	this->_body.lowerRightLeg.shape = mat4_scale(this->_body.lowerRightLeg.size);
-	legHalfX = this->_body.lowerRightLeg.size.x * 0.5f;
-	legHalfY = this->_body.lowerRightLeg.size.y * 0.5f;
-	legHalfZ = this->_body.lowerRightLeg.size.z * 0.5f;
+	halfX = this->_body.lowerRightLeg.size.x * 0.5f;
+	halfY = this->_body.lowerRightLeg.size.y * 0.5f;
+	halfZ = this->_body.lowerRightLeg.size.z * 0.5f;
 	Vec3 kneeRight = Vec3{
-		legHalfX,
+		halfX,
 		-this->_body.upperRightLeg.size.y * 0.5f,
 		0.0f
 	};
-	this->_body.lowerRightLeg.local = translate(kneeRight) * translate(-legHalfX, -legHalfY, 0.0f);
-	this->_body.lowerRightLeg.colour = Colour(0.0f, 0.0f, 1.0f);
-	this->_body.lowerRightLeg.tex = TextureType::Dirt;
-	this->_body.lowerRightLeg.jointPivot = Vec3{0.0f, legHalfY, 0.0f};
+	this->_body.lowerRightLeg.local = translate(kneeRight) * translate(-halfX, -halfY, 0.0f);
+	this->_body.lowerRightLeg.jointPivot = Vec3{0.0f, halfY, 0.0f};
 }

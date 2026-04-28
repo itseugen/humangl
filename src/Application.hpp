@@ -86,6 +86,7 @@ struct Application
 	const Mat4&	top() const;
 	
 	void	draw(const BodyPart& bodyPart, const Mat4& world);
+	void	resizeBody();
 
 	std::unordered_map<TextureType, GLuint>	_textures;
 
