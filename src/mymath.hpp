@@ -74,3 +74,5 @@ Vec3	sub(Vec3 a, Vec3 b);
 Vec3	norm(Vec3 v);
 Vec3	cross(Vec3 a, Vec3 b);
 float	dot(Vec3 a, Vec3 b);
+
+void	clamp(float& value, float min, float max);
