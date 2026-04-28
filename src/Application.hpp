@@ -36,6 +36,9 @@ struct BodyPart
 	Colour colour = Colour(1.0f, 1.0f, 1.0f);
 	TextureType tex = TextureType::None;
 	Mat4 animation = mat4_identity();
+
+	float jointAngleZMin = -360.0f;
+	float jointAngleZMax = 360.0f;
 };
 
 struct Body

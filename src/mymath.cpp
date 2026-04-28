@@ -233,8 +233,10 @@ Mat4	operator*(const Mat4& a, const Mat4& b)
 	return mat4_mul(a, b);
 }
 
-void	myClamp(float& value, float min, float max)
+float	myClamp(float value, float min, float max)
 {
-	if(value < min) value = min;
-	if(value > max) value = max;
+	float result = value;
+	if(value < min) result = min;
+	if(value > max) result = max;
+	return result;
 }

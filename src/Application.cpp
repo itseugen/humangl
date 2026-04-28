@@ -528,38 +528,56 @@ void	Application::initBody()
 	/* HEAD */
 	this->_body.head.size = Vec3{2.5f, 2.5f, 2.5f};
 	this->_body.head.colour = Colour(0.8784f, 0.6706f, 0.5804f);
+	this->_body.head.jointAngleZMin = -80.0f * DEG2RAD;
+	this->_body.head.jointAngleZMax = 85.0f * DEG2RAD;
 
 	/* UPPER LEFT ARM */
 	this->_body.upperLeftArm.size = Vec3{1.0f, 3.5f, 1.0f};
 	this->_body.upperLeftArm.colour = Colour(0.8784f, 0.6706f, 0.5804f);
+	this->_body.upperLeftArm.jointAngleZMin = -180.0f * DEG2RAD;
+	this->_body.upperLeftArm.jointAngleZMax = 70.0f * DEG2RAD;
 
 	/* UPPER RIGHT ARM */
 	this->_body.upperRightArm.size = Vec3{1.0f, 3.5f, 1.0f};
 	this->_body.upperRightArm.colour = Colour(0.8784f, 0.6706f, 0.5804f);
+	this->_body.upperRightArm.jointAngleZMin = -180.0f * DEG2RAD;
+	this->_body.upperRightArm.jointAngleZMax = 70.0f * DEG2RAD;
 
 	/* LOWER LEFT ARM */
 	this->_body.lowerLeftArm.size = Vec3{1.0f, 3.0f, 1.0f};
 	this->_body.lowerLeftArm.colour = Colour(0.8784f, 0.6706f, 0.5804f);
+	this->_body.lowerLeftArm.jointAngleZMin = 0.0f * DEG2RAD;
+	this->_body.lowerLeftArm.jointAngleZMax = 170.0f * DEG2RAD;
 
 	/* LOWER RIGHT ARM */
 	this->_body.lowerRightArm.size = Vec3{1.0f, 3.0f, 1.0f};
 	this->_body.lowerRightArm.colour = Colour(0.8784f, 0.6706f, 0.5804f);
+	this->_body.lowerRightArm.jointAngleZMin = 0.0f * DEG2RAD;
+	this->_body.lowerRightArm.jointAngleZMax = 170.0f * DEG2RAD;
 
 	/* UPPER LEFT LEG */
 	this->_body.upperLeftLeg.size = Vec3{1.0f, 3.5f, 2.0f};
 	this->_body.upperLeftLeg.colour = Colour(0.0118f, 0.2980f, 0.6f);
+	this->_body.upperLeftLeg.jointAngleZMin = -90.0f * DEG2RAD;
+	this->_body.upperLeftLeg.jointAngleZMax = 120.0f * DEG2RAD;
 
 	/* UPPER RIGHT LEG */
 	this->_body.upperRightLeg.size = Vec3{1.0f, 3.5f, 2.0f};
 	this->_body.upperRightLeg.colour = Colour(0.0118f, 0.2980f, 0.6f);
+	this->_body.upperRightLeg.jointAngleZMin = -90.0f * DEG2RAD;
+	this->_body.upperRightLeg.jointAngleZMax = 120.0f * DEG2RAD;
 
 	/* LOWER LEFT LEG */
 	this->_body.lowerLeftLeg.size = Vec3{1.0f, 3.5f, 2.0f};
 	this->_body.lowerLeftLeg.colour = Colour(0.0118f, 0.2980f, 0.6f);
+	this->_body.lowerLeftLeg.jointAngleZMin = -170.0f * DEG2RAD;
+	this->_body.lowerLeftLeg.jointAngleZMax = 0.0f * DEG2RAD;
 
 	/* LOWER RIGHT LEG */
 	this->_body.lowerRightLeg.size = Vec3{1.0f, 3.5f, 2.0f};
 	this->_body.lowerRightLeg.colour = Colour(0.0118f, 0.2980f, 0.6f);
+	this->_body.lowerRightLeg.jointAngleZMin = -170.0f * DEG2RAD;
+	this->_body.lowerRightLeg.jointAngleZMax = 0.0f * DEG2RAD;
 
 	this->resizeBody();
 }

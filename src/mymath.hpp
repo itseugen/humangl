@@ -75,4 +75,4 @@ Vec3	norm(Vec3 v);
 Vec3	cross(Vec3 a, Vec3 b);
 float	dot(Vec3 a, Vec3 b);
 
-void	myClamp(float& value, float min, float max);
+float	myClamp(float value, float min, float max);
