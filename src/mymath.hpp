@@ -57,6 +57,7 @@ Mat4	translate(float x, float y, float z);
 Mat4	translate(const Vec3 &v);
 
 // spinning spinning spinning
+Mat4	rotate_x(float angle);
 Mat4	rotate_y(float angle);
 Mat4	rotate_z(float angle);
 

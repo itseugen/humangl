@@ -35,6 +35,7 @@ int main()
 		if (angle >= 360.0f) angle -= 360.0f;
 		app.push(mat4_identity());
 		app.push(app.top() * translate(posX, 0.0f, 0.0f) * app._body.torso.local); // Not necessary to push the identity but it shows how the stack works
+
 		app.draw(app._body.torso, app.top());
 
 		Mat4 headNod = applyJointRoation(app._body.head, nod(now, 1.5f));

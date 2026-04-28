@@ -66,6 +66,18 @@ Mat4 translate(const Vec3 &v)
 	return translate(v.x, v.y, v.z);
 }
 
+Mat4	rotate_x(float angle)
+{
+	float c = cosf(angle);
+	float s = sinf(angle);
+	Mat4 r = mat4_identity();
+	r.m[5] = c;
+	r.m[6] = s;
+	r.m[9] = -s;
+	r.m[10] = c;
+	return r;
+}
+
 /**
  * @brief Rotation around the Y axis
  * @param angle in radians
