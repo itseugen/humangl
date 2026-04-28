@@ -27,8 +27,10 @@ struct BodyPart
 	Mat4 local; // Position relative to parent (or world if root)
 	Mat4 shape; // stays for now to save calculations but could be replaced with a Vec3 size and a mat4_scale in the draw function
 	Vec3 jointPivot;
-	Colour colour;
-	TextureType tex;
+	Colour colour = Colour(1.0f, 1.0f, 1.0f);
+	TextureType tex = TextureType::None;
+
+	Mat4 animation = mat4_identity();
 };
 
 struct Body
