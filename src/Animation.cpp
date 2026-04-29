@@ -1,5 +1,13 @@
 #include "Animation.hpp"
 
+Animation::Animation()
+{
+}
+
+Animation::~Animation()
+{
+}
+
 Mat4	Animation::nod(float time, float nodSpeed)
 {
 	float nodAngle = sin(time * nodSpeed) * 0.4f;
@@ -32,9 +40,10 @@ void	Animation::clearAnimation(Body &body)
 	body.lowerRightLeg.animation = mat4_identity();
 }
 
-void	Animation::walk(Body &body, float time)
+void	Animation::walk(Body &body, float currentTime)
 {
-	float t = time * 1.0f;
+	float t = currentTime - this->_startTime;
+	t = t * 1.0f;
 
 	float armSwing = sin(t * 0.6f) * 0.4f;
 	float legSwing = sin(t * 0.8f) * 0.4f;
@@ -53,4 +62,9 @@ void	Animation::walk(Body &body, float time)
 	body.lowerRightLeg.animation = applyJointRoation(body.lowerRightLeg, rotate_z_clamp(legSwing * 0.5f, body.lowerRightLeg));
 
 	body.head.animation = applyJointRoation(body.head, rotate_z_clamp(sin(t * 0.5f) * 0.2f, body.head));
+}
+
+void	Animation::setStartTime(float time)
+{
+	this->_startTime = time;
 }

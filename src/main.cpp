@@ -1,4 +1,6 @@
 #include "humangl.h"
+#include "Application.hpp"
+#include "Animation.hpp"
 
 int main()
 {
@@ -30,13 +32,13 @@ int main()
 		switch(app._animation)
 		{
 			case FullBodyAnimation::None:
-				Animation::clearAnimation(app._body);
+				app._animationController.clearAnimation(app._body);
 				break;
 			case FullBodyAnimation::Walk:
-				Animation::walk(app._body, now);
+				app._animationController.walk(app._body, now);
 				break;
 			default:
-				Animation::clearAnimation(app._body);
+				app._animationController.clearAnimation(app._body);
 				break;
 		}
 
