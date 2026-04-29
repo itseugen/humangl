@@ -33,7 +33,7 @@ struct Application
 
 	Vec3 _cameraFront = {0, 0, -1};
 	Vec3 _cameraUp = {0, 1, 0};
-	Vec3 _cameraPosition = {-6.0f, 2.0f, 14.0f};
+	Vec3 _cameraPosition = {-6.0f, 2.0f, 30.0f};
 	
 	std::unordered_map<TextureType, GLuint>	_textures;
 
