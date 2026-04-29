@@ -445,12 +445,12 @@ void	Application::keyCallback(GLFWwindow* window, int key, int scancode, int act
 	if (key == GLFW_KEY_1 && action == GLFW_PRESS)
 	{
 		if (app->_animation == FullBodyAnimation::Walk)
-		{
 			app->_animation = FullBodyAnimation::None;
+		else
+		{
+			app->_animation = FullBodyAnimation::Walk;
 			app->_animationController.setStartTime((float)glfwGetTime());
 		}
-		else
-			app->_animation = FullBodyAnimation::Walk;
 	}
 }
 
