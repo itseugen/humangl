@@ -1,17 +1,17 @@
-#include "Actions.hpp"
+#include "Animation.hpp"
 
-Mat4 nod(float time, float nodSpeed)
+Mat4	Animation::nod(float time, float nodSpeed)
 {
 	float nodAngle = sin(time * nodSpeed) * 0.4f;
 	return  rotate_z(nodAngle);
 }
 
-Mat4 applyJointRoation(const BodyPart& part, const Mat4&rotation)
+Mat4	Animation::applyJointRoation(const BodyPart& part, const Mat4&rotation)
 {
 	return translate(part.jointPivot) * rotation * translate(-part.jointPivot);
 }
 
-Mat4 rotate_z_clamp(float angle, BodyPart& part)
+Mat4	Animation::rotate_z_clamp(float angle, BodyPart& part)
 {
 	float clampedAngle = myClamp(angle, part.jointAngleZMin, part.jointAngleZMax);
 	return rotate_z(clampedAngle);
