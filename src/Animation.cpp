@@ -40,7 +40,7 @@ void	Animation::clearAnimation(Body &body)
 	body.lowerRightLeg.animation = mat4_identity();
 }
 
-void	Animation::walk(Body &body, float currentTime)
+void	Animation::walk(Body &body, float currentTime, float deltaTime)
 {
 	float t = currentTime - this->_startTime;
 	t = t * 1.0f;
@@ -48,23 +48,32 @@ void	Animation::walk(Body &body, float currentTime)
 	float armSwing = sin(t * 0.6f) * 0.4f;
 	float legSwing = sin(t * 0.8f) * 0.4f;
 
+	
 	// IF i want to move the torso along the walk,
 	// either add it to the main or make animation its own class that has a start time etc
-
+	
 	body.upperLeftArm.animation = applyJointRoation(body.upperLeftArm, rotate_z_clamp(armSwing, body.upperLeftArm));
 	body.upperRightArm.animation = applyJointRoation(body.upperRightArm, rotate_z_clamp(-armSwing, body.upperRightArm));
 	body.upperLeftLeg.animation = applyJointRoation(body.upperLeftLeg, rotate_z_clamp(-legSwing, body.upperLeftLeg));
 	body.upperRightLeg.animation = applyJointRoation(body.upperRightLeg, rotate_z_clamp(legSwing, body.upperRightLeg));
-
+	
 	body.lowerLeftArm.animation = applyJointRoation(body.lowerLeftArm, rotate_z_clamp(armSwing * 0.5f, body.lowerLeftArm));
 	body.lowerRightArm.animation = applyJointRoation(body.lowerRightArm, rotate_z_clamp(-armSwing * 0.5f, body.lowerRightArm));
 	body.lowerLeftLeg.animation = applyJointRoation(body.lowerLeftLeg, rotate_z_clamp(-legSwing * 0.5f, body.lowerLeftLeg));
 	body.lowerRightLeg.animation = applyJointRoation(body.lowerRightLeg, rotate_z_clamp(legSwing * 0.5f, body.lowerRightLeg));
-
+	
 	body.head.animation = applyJointRoation(body.head, rotate_z_clamp(sin(t * 0.5f) * 0.2f, body.head));
+
+	this->_posX -= 0.6f * deltaTime;
+	body.torso.animation = translate(this->_posX, 0.0f, 0.0f);
 }
 
 void	Animation::setStartTime(float time)
 {
 	this->_startTime = time;
+}
+
+void	Animation::setPositionX(float x)
+{
+	this->_posX = x;
 }

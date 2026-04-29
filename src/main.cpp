@@ -35,7 +35,7 @@ int main()
 				app._animationController.clearAnimation(app._body);
 				break;
 			case FullBodyAnimation::Walk:
-				app._animationController.walk(app._body, now);
+				app._animationController.walk(app._body, now, app._dt);
 				break;
 			default:
 				app._animationController.clearAnimation(app._body);
