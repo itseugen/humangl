@@ -448,7 +448,19 @@ void	Application::keyCallback(GLFWwindow* window, int key, int scancode, int act
 			app->_animation = FullBodyAnimation::None;
 		else
 		{
+			app->_animationController.clearAnimation(app->_body);
 			app->_animation = FullBodyAnimation::Walk;
+			app->_animationController.setStartTime((float)glfwGetTime());
+		}
+	}
+	if (key == GLFW_KEY_2 && action == GLFW_PRESS)
+	{
+		if (app->_animation == FullBodyAnimation::Jump)
+			app->_animation = FullBodyAnimation::None;
+		else
+		{
+			app->_animationController.clearAnimation(app->_body);
+			app->_animation = FullBodyAnimation::Jump;
 			app->_animationController.setStartTime((float)glfwGetTime());
 		}
 	}

@@ -63,8 +63,6 @@ struct Application
 		std::vector<Mat4>	_stack;
 		bool	_mouseActive = false;
 		float	_moveSpeed = 1.5f;
-		static constexpr float	DEG2RAD = 3.14159265f / 180.0f;
-		static constexpr float	DEG2RADFOV = 45.0f * DEG2RAD;
 
 		void	updateCameraDirection();
 		static void	keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);

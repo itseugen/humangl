@@ -14,7 +14,7 @@ Mat4	Animation::nod(float time, float nodSpeed)
 	return  rotate_z(nodAngle);
 }
 
-Mat4	Animation::applyJointRoation(const BodyPart& part, const Mat4&rotation)
+Mat4	Animation::applyJointRotation(const BodyPart& part, const Mat4&rotation)
 {
 	return translate(part.jointPivot) * rotation * translate(-part.jointPivot);
 }
@@ -28,7 +28,8 @@ Mat4	Animation::rotate_z_clamp(float angle, BodyPart& part)
 /// @brief Clears any animation from the body
 void	Animation::clearAnimation(Body &body)
 {
-	body.torso.animation = mat4_identity();
+	// To keep the x movement, maybe change later
+	// body.torso.animation = mat4_identity();
 	body.head.animation = mat4_identity();
 	body.upperLeftArm.animation = mat4_identity();
 	body.lowerLeftArm.animation = mat4_identity();
@@ -52,20 +53,117 @@ void	Animation::walk(Body &body, float currentTime, float deltaTime)
 	// IF i want to move the torso along the walk,
 	// either add it to the main or make animation its own class that has a start time etc
 	
-	body.upperLeftArm.animation = applyJointRoation(body.upperLeftArm, rotate_z_clamp(armSwing, body.upperLeftArm));
-	body.upperRightArm.animation = applyJointRoation(body.upperRightArm, rotate_z_clamp(-armSwing, body.upperRightArm));
-	body.upperLeftLeg.animation = applyJointRoation(body.upperLeftLeg, rotate_z_clamp(-legSwing, body.upperLeftLeg));
-	body.upperRightLeg.animation = applyJointRoation(body.upperRightLeg, rotate_z_clamp(legSwing, body.upperRightLeg));
+	body.upperLeftArm.animation = applyJointRotation(body.upperLeftArm, rotate_z_clamp(armSwing, body.upperLeftArm));
+	body.upperRightArm.animation = applyJointRotation(body.upperRightArm, rotate_z_clamp(-armSwing, body.upperRightArm));
+	body.upperLeftLeg.animation = applyJointRotation(body.upperLeftLeg, rotate_z_clamp(-legSwing, body.upperLeftLeg));
+	body.upperRightLeg.animation = applyJointRotation(body.upperRightLeg, rotate_z_clamp(legSwing, body.upperRightLeg));
 	
-	body.lowerLeftArm.animation = applyJointRoation(body.lowerLeftArm, rotate_z_clamp(armSwing * 0.5f, body.lowerLeftArm));
-	body.lowerRightArm.animation = applyJointRoation(body.lowerRightArm, rotate_z_clamp(-armSwing * 0.5f, body.lowerRightArm));
-	body.lowerLeftLeg.animation = applyJointRoation(body.lowerLeftLeg, rotate_z_clamp(-legSwing * 0.5f, body.lowerLeftLeg));
-	body.lowerRightLeg.animation = applyJointRoation(body.lowerRightLeg, rotate_z_clamp(legSwing * 0.5f, body.lowerRightLeg));
+	body.lowerLeftArm.animation = applyJointRotation(body.lowerLeftArm, rotate_z_clamp(armSwing * 0.5f, body.lowerLeftArm));
+	body.lowerRightArm.animation = applyJointRotation(body.lowerRightArm, rotate_z_clamp(-armSwing * 0.5f, body.lowerRightArm));
+	body.lowerLeftLeg.animation = applyJointRotation(body.lowerLeftLeg, rotate_z_clamp(-legSwing * 0.5f, body.lowerLeftLeg));
+	body.lowerRightLeg.animation = applyJointRotation(body.lowerRightLeg, rotate_z_clamp(legSwing * 0.5f, body.lowerRightLeg));
 	
-	body.head.animation = applyJointRoation(body.head, rotate_z_clamp(sin(t * 0.5f) * 0.2f, body.head));
+	body.head.animation = applyJointRotation(body.head, rotate_z_clamp(sin(t * 0.5f) * 0.2f, body.head));
 
 	this->_posX -= 0.6f * deltaTime;
 	body.torso.animation = translate(this->_posX, 0.0f, 0.0f);
+}
+
+void	Animation::jump(Body &body, float currentTime, float deltaTime)
+{
+	float t = currentTime - _startTime;
+	float angle;
+	float crouchY = 0.0f;
+
+	this->_landed = false;
+
+	if (t < 2.0f) // down
+	{
+		float u = t / 2.0f;
+		angle = u * M_PI;
+	}
+	else if (t < 3.0f) // up again
+	{
+		float u = (t - 2.0f) / 1.0f;
+		angle = M_PI + u * M_PI;
+	}
+
+	if (t < 3.0f)
+	{
+		float kneeBend = (45.0f * 0.5f * (1.0f - cos(angle))) * DEG2RAD;
+	
+		body.lowerLeftLeg.animation  = applyJointRotation(body.lowerLeftLeg,  rotate_z_clamp(-kneeBend, body.lowerLeftLeg));
+		body.lowerRightLeg.animation = applyJointRotation(body.lowerRightLeg, rotate_z_clamp(-kneeBend, body.lowerRightLeg));
+	
+		float hipBend = kneeBend * 0.5f;
+	
+		body.upperLeftLeg.animation  = applyJointRotation(body.upperLeftLeg,  rotate_z_clamp(hipBend, body.upperLeftLeg));
+		body.upperRightLeg.animation = applyJointRotation(body.upperRightLeg, rotate_z_clamp(hipBend, body.upperRightLeg));
+	
+		body.lowerLeftArm.animation  = applyJointRotation(body.lowerLeftArm,  rotate_z_clamp(kneeBend, body.lowerLeftArm));
+		body.lowerRightArm.animation = applyJointRotation(body.lowerRightArm, rotate_z_clamp(kneeBend, body.lowerRightArm));
+	
+		float L1 = body.upperLeftLeg.size.y;
+		float L2 = body.lowerLeftLeg.size.y;
+	
+		float H = L1 * cos(hipBend) + L2 * cos(hipBend - kneeBend);
+		crouchY = -((L1 + L2) - H);
+	}
+
+	float jumpStart = 2.5f;
+	float jumpEnd = 5.0f;
+	float jumpY = 0.0f;
+	if (t > jumpStart)
+	{
+		float u = (t - jumpStart) / (jumpEnd - jumpStart);
+		u = myClamp(u, 0.0f, 1.0f);
+		jumpY = jumpArc(u, 5.0f);
+	}
+	float landStart = jumpEnd -0.2f;
+	float landEnd = landStart + 3.0f;
+	if (t > landStart && t < landEnd)
+	{
+		if (t < landStart + 1.0f)
+		{
+			float u = (t - landStart) / 1.0f;
+			angle = u * M_PI;
+		}
+		else
+		{
+			float u = (t - (landStart + 1.0f)) / 2.0f;
+			angle = M_PI - (u * M_PI);
+		}
+		float kneeBend = (45.0f * 0.5f * (1.0f - cos(angle))) * DEG2RAD;
+
+		body.lowerLeftLeg.animation  = applyJointRotation(body.lowerLeftLeg,  rotate_z_clamp(-kneeBend, body.lowerLeftLeg));
+		body.lowerRightLeg.animation = applyJointRotation(body.lowerRightLeg, rotate_z_clamp(-kneeBend, body.lowerRightLeg));
+
+		float hipBend = kneeBend * 0.5f;
+
+		body.upperLeftLeg.animation  = applyJointRotation(body.upperLeftLeg,  rotate_z_clamp(hipBend, body.upperLeftLeg));
+		body.upperRightLeg.animation = applyJointRotation(body.upperRightLeg, rotate_z_clamp(hipBend, body.upperRightLeg));
+
+		body.lowerLeftArm.animation  = applyJointRotation(body.lowerLeftArm,  rotate_z_clamp(kneeBend, body.lowerLeftArm));
+		body.lowerRightArm.animation = applyJointRotation(body.lowerRightArm, rotate_z_clamp(kneeBend, body.lowerRightArm));
+
+		float L1 = body.upperLeftLeg.size.y;
+		float L2 = body.lowerLeftLeg.size.y;
+
+		float H = L1 * cos(hipBend) + L2 * cos(hipBend - kneeBend);
+		crouchY = -((L1 + L2) - H);
+	}
+
+	if (t > landEnd)
+		this->_landed = true;
+
+	this->_posY = crouchY + jumpY;
+
+	body.torso.animation = translate(this->_posX, this->_posY, 0.0f);
+}
+
+float	Animation::jumpArc(float u, float height)
+{
+	return (height * 4.0f * u * (1.0f - u));
 }
 
 void	Animation::setStartTime(float time)
@@ -76,4 +174,9 @@ void	Animation::setStartTime(float time)
 void	Animation::setPositionX(float x)
 {
 	this->_posX = x;
+}
+
+bool	Animation::getLanded()
+{
+	return this->_landed;
 }

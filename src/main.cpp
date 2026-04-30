@@ -37,10 +37,19 @@ int main()
 			case FullBodyAnimation::Walk:
 				app._animationController.walk(app._body, now, app._dt);
 				break;
+			case FullBodyAnimation::Jump:
+				app._animationController.jump(app._body, now, app._dt);
+				if (app._animationController.getLanded() == true)
+				{
+					app._animationController.clearAnimation(app._body);
+					app._animation = FullBodyAnimation::None;
+				}
+				break;
 			default:
 				app._animationController.clearAnimation(app._body);
 				break;
 		}
+		// std::cout << app._body.lowerLeftLeg.animation.m[4] << std::endl;
 
 		app.push(mat4_identity());
 		app.push(app.top() * app._body.torso.local * app._body.torso.animation); // Not necessary to push the identity but it shows how the stack works

@@ -7,6 +7,7 @@
 #include <string>
 #include <cmath>
 #include <unordered_map>
+#include <math.h>
 
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>   // get window/context and glfwGetProcAddress
@@ -45,6 +46,7 @@ enum class FullBodyAnimation
 {
 	None,
 	Walk,
+	Jump,
 };
 
 struct BodyPart
@@ -75,6 +77,8 @@ struct Body
 	BodyPart	lowerRightLeg;
 };
 
+static constexpr float	DEG2RAD = 3.14159265f / 180.0f;
+static constexpr float	DEG2RADFOV = 45.0f * DEG2RAD;
 
 // #include "imgui.h"
 // #include "imgui_impl_glfw.h"
