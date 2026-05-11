@@ -49,11 +49,8 @@ int main()
 				app._animationController.clearAnimation(app._body);
 				break;
 		}
-		// std::cout << app._body.lowerLeftLeg.animation.m[4] << std::endl;
-
-		app.push(mat4_identity());
-		app.push(app.top() * app._body.torso.local * app._body.torso.animation); // Not necessary to push the identity but it shows how the stack works
-
+		app.push(mat4_identity()); // Not necessary to push the identity but it shows how the stack works
+		app.push(app.top() * app._body.torso.local * app._body.torso.animation);
 		app.draw(app._body.torso, app.top());
 
 		app.push(app.top() * app._body.head.local * app._body.head.animation);
@@ -91,6 +88,7 @@ int main()
 		app.draw(app._body.lowerRightLeg, app.top());
 		app.pop(); // lower right leg
 		app.pop(); // upper right leg
+
 		app.pop(); // torso
 		app.pop(); // identity
 

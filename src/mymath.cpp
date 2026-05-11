@@ -66,6 +66,11 @@ Mat4 translate(const Vec3 &v)
 	return translate(v.x, v.y, v.z);
 }
 
+/**
+ * @brief Rotation around the X axis
+ * @param angle in radians
+ * @return Returns the rotation matrix
+ */
 Mat4	rotate_x(float angle)
 {
 	float c = cosf(angle);
@@ -95,6 +100,11 @@ Mat4	rotate_y(float angle)
 	return r;
 }
 
+/**
+ * @brief Rotation around the Z axis
+ * @param angle in radians
+ * @return Returns the rotation matrix
+ */
 Mat4 rotate_z(float angle)
 {
 	float c = cosf(angle);
@@ -233,6 +243,9 @@ Mat4	operator*(const Mat4& a, const Mat4& b)
 	return mat4_mul(a, b);
 }
 
+/**
+ * @brief Makes sure value stays between min and max
+ */
 float	myClamp(float value, float min, float max)
 {
 	float result = value;

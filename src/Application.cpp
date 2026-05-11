@@ -1,5 +1,8 @@
 #include "Application.hpp"
 
+/**
+ * @brief The constructor, sets up the window and initilizes values as well as loading the textures
+ */
 Application::Application()
 {
 	initWindow();
@@ -22,13 +25,13 @@ Application::Application()
 	this->initBody();
 }
 
+/**
+ * @brief Destroys the window and cleans up storage
+ */
 Application::~Application()
 {
 	glDeleteBuffers(1, &this->_VBO);
 	glDeleteVertexArrays(1, &this->_VAO);
-	// ImGui_ImplOpenGL3_Shutdown();
-	// ImGui_ImplGlfw_Shutdown();
-	// ImGui::DestroyContext();
 	glfwDestroyWindow(this->_win);
 	glfwTerminate();
 }
@@ -75,6 +78,9 @@ void	Application::initWindow()
 	this->_win = win;
 }
 
+/**
+ * @brief Setup the buffers to allow loading of a 1x1x1 cube and drawing of textures. Sets up the shaders
+ */
 int	Application::setupBuffers()
 {
 	const char* vs_src;
@@ -207,6 +213,10 @@ int	Application::setupBuffers()
 	return 0;
 }
 
+/**
+ * @brief Compilation of the shader
+ * @return Returns the shader
+ */
 GLuint compileShader(GLenum type, const char* src)
 {
 	// new shader
@@ -224,6 +234,10 @@ GLuint compileShader(GLenum type, const char* src)
 	return s;
 }
 
+/**
+ * @brief Links the program and shaders together
+ * @return Returns the program
+ */
 GLuint linkProgram(GLuint vs, GLuint fs)
 {
 	// Empty program
@@ -242,15 +256,19 @@ GLuint linkProgram(GLuint vs, GLuint fs)
 	return p;
 }
 
-/// @brief Addes a matrix to the top of the stack, used for hierarchical transformations (like a model matrix for an object, then pushing a child object with its own transform on top)
-/// @param mat the matrix to push onto the stack
+/**
+ * @brief Adds a Mat4 to the top of the stack
+ * @param mat The matrix to add
+ */
 void	Application::push(const Mat4& mat)
 {
 	this->_stack.push_back(mat);
 }
 
-/// @brief Pops a matrix from the top of the stack
-/// @return The popped matrix
+/**
+ * @brief Pops (removes) the top matrix from the stack
+ * @return The popped matrix
+ */
 Mat4	Application::pop()
 {
 	if(this->_stack.empty())
@@ -262,6 +280,9 @@ Mat4	Application::pop()
 	return top;
 }
 
+/**
+ * @brief Returns the top of the stack
+ */
 Mat4&	Application::top()
 {
 	if(this->_stack.empty())
@@ -280,9 +301,11 @@ const Mat4&	Application::top() const
 	return this->_stack.back();
 }
 
-/// @brief Draws a 1x1x1 cube centered at the origin using the body part and the world matrix
-/// @param bodyPart the body part, contains the shape, colour and texture
-/// @param world the world matrix, contains the position and rotation of the body part in the world
+/**
+ * @brief Draws a 1x1x1 cube centered at origin and moves it according to the MVP
+ * @param bodyPart The body part to draw. Contains the shape as well as a colour and potentially a texture to draw
+ * @param world The world matrix which contains position and rotation of the part.
+ */
 void	Application::draw(const BodyPart& bodyPart, const Mat4& world)
 {
 	Mat4	proj = perspective(DEG2RADFOV, (float)this->_winWidth/(float)this->_winHeight, 0.1f, 100.f);
@@ -366,10 +389,14 @@ void	Application::keybinds()
 	// std::cout << "Pitch: " << this->_pitch << " Yaw: " << this->_yaw << std::endl;
 }
 
-/// @brief THe mouse callback function for GLFW, handles mouse movement and updates the camera direction accordingly
-/// @param window 
-/// @param xpos 
-/// @param ypos 
+/**
+ * @brief Controls mouse movement to look around
+ * @warning Due to Windows Subsystem for Linux limitations this is untested and might not work.
+ * @param window The window as required by a callback function to later the app inside this function
+ * @param xpos The x position of the mouse on screen
+ * @param ypos The y position of the mouse on screen
+ * @attention Mouse reset doesn't properly work in WSL
+ */
 void	Application::mouseCallback(GLFWwindow* window, double xpos, double ypos)
 {
 	Application* app = (Application*)glfwGetWindowUserPointer(window);
@@ -406,12 +433,9 @@ void	Application::mouseCallback(GLFWwindow* window, double xpos, double ypos)
 	app->_cameraFront = norm(front);
 }
 
-/// @brief The key callback function for GLFW, handles key presses and releases
-/// @param window 
-/// @param key 
-/// @param scancode 
-/// @param action 
-/// @param mods 
+/**
+ * @brief The key Callback function for GLFW, handles one time presses
+ */
 void	Application::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
 	Application* app = (Application*)glfwGetWindowUserPointer(window);
@@ -466,6 +490,9 @@ void	Application::keyCallback(GLFWwindow* window, int key, int scancode, int act
 	}
 }
 
+/**
+ * @brief Updates the direction the camera is looking at
+ */
 void	Application::updateCameraDirection()
 {
 	float	yawRadian = this->_yaw * DEG2RAD;
@@ -532,6 +559,9 @@ GLuint	Application::loadPPM(const std::string& path, int& width, int&height)
 	return texID;
 }
 
+/**
+ * @brief Initializes the bodyparts with different sizes and values. Could be written shorter but kept this way for relative ease of changing
+ */
 void	Application::initBody()
 {
 	/* TORSO */
@@ -597,6 +627,10 @@ void	Application::initBody()
 	this->resizeBody();
 }
 
+/**
+ * @brief Handles setup and recalculation of all size related components, especially those dependent on parents
+ * @warning Without calling this, any resizing of a part might break parts of the model
+ */
 void	Application::resizeBody()
 {
 	float halfX, halfY, halfZ;

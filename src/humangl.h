@@ -18,9 +18,6 @@
 # include <GL/gl.h>        // basic GL types & enums (system header)
 #endif
 
-// #include "mymath.hpp"
-// #include "Animation.hpp"
-// #include "Application.hpp"
 #include "opengl.hpp"
 #include "mymath.hpp"
 
@@ -35,6 +32,9 @@ struct Colour
 	Colour(float red, float green, float blue): r(red), g(green), b(blue) {}
 };
 
+/**
+ * @brief The different textures to apply, or none to apply a colour
+ */
 enum class TextureType
 {
 	None,
@@ -42,6 +42,9 @@ enum class TextureType
 	Dirt,
 };
 
+/**
+ * @brief The different animation to apply or none to stand still
+ */
 enum class FullBodyAnimation
 {
 	None,
@@ -49,20 +52,26 @@ enum class FullBodyAnimation
 	Jump,
 };
 
+/**
+ * @brief Each subsection of a body. Always only a box
+ */
 struct BodyPart
 {
 	Mat4 local; // Position relative to parent (or world if root)
-	Mat4 shape; // stays for now to save calculations but could be replaced with a Vec3 size and a mat4_scale in the draw function
-	Vec3 size; // To not always access the matrix of shape
+	Mat4 shape; // Shape of the object, same as size in Mat4 form
+	Vec3 size; // Size (shape) of all object sides, same as shape in Vec3 form
 	Vec3 jointPivot; // The point around the joint rotates (always the joint connecting it to its parent)
-	Colour colour = Colour(1.0f, 1.0f, 1.0f);
-	TextureType tex = TextureType::None;
-	Mat4 animation = mat4_identity();
+	Colour colour = Colour(1.0f, 1.0f, 1.0f); // The colour of the body part, not visible if texture is set
+	TextureType tex = TextureType::None; // The Texture the body part is set to, or None if a colour should be shown
+	Mat4 animation = mat4_identity(); // The state of the current animation
 
-	float jointAngleZMin = -360.0f;
-	float jointAngleZMax = 360.0f;
+	float jointAngleZMin = -360.0f; // The minimum rotation of the joint (to parent) on the z axis
+	float jointAngleZMax = 360.0f; // The maximum rotation of the joint (to parent) on the z axis
 };
 
+/**
+ * @brief Stores all the body parts of the overall body
+ */
 struct Body
 {
 	BodyPart	torso;

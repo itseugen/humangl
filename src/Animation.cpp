@@ -8,24 +8,35 @@ Animation::~Animation()
 {
 }
 
+/**
+ * @brief A sinus function to make a nodding motion
+ */
 Mat4	Animation::nod(float time, float nodSpeed)
 {
 	float nodAngle = sin(time * nodSpeed) * 0.4f;
 	return  rotate_z(nodAngle);
 }
 
+/**
+ * @brief Applies any rotation to a joint
+ */
 Mat4	Animation::applyJointRotation(const BodyPart& part, const Mat4&rotation)
 {
 	return translate(part.jointPivot) * rotation * translate(-part.jointPivot);
 }
 
+/**
+ * @brief A small helper function that applies the joint limitations to any Z-Axis rotation
+ */
 Mat4	Animation::rotate_z_clamp(float angle, BodyPart& part)
 {
 	float clampedAngle = myClamp(angle, part.jointAngleZMin, part.jointAngleZMax);
 	return rotate_z(clampedAngle);
 }
 
-/// @brief Clears any animation from the body
+/**
+ * @brief Clears all animation Matrixes (replace with identity)
+ */
 void	Animation::clearAnimation(Body &body)
 {
 	// To keep the x movement, maybe change later
@@ -41,6 +52,12 @@ void	Animation::clearAnimation(Body &body)
 	body.lowerRightLeg.animation = mat4_identity();
 }
 
+/**
+ * @brief Makes the body do walking motions and move on the X-Axis. Movement is "permanent" to not have hard resets
+ * @param body The body to move (I only have one)
+ * @param currentTime The time (glfw_getTime)
+ * @param deltaTime The delta time to account for lags
+ */
 void	Animation::walk(Body &body, float currentTime, float deltaTime)
 {
 	float t = currentTime - this->_startTime;
@@ -49,10 +66,6 @@ void	Animation::walk(Body &body, float currentTime, float deltaTime)
 	float armSwing = sin(t * 0.6f) * 0.4f;
 	float legSwing = sin(t * 0.8f) * 0.4f;
 
-	
-	// IF i want to move the torso along the walk,
-	// either add it to the main or make animation its own class that has a start time etc
-	
 	body.upperLeftArm.animation = applyJointRotation(body.upperLeftArm, rotate_z_clamp(armSwing, body.upperLeftArm));
 	body.upperRightArm.animation = applyJointRotation(body.upperRightArm, rotate_z_clamp(-armSwing, body.upperRightArm));
 	body.upperLeftLeg.animation = applyJointRotation(body.upperLeftLeg, rotate_z_clamp(-legSwing, body.upperLeftLeg));
@@ -69,6 +82,12 @@ void	Animation::walk(Body &body, float currentTime, float deltaTime)
 	body.torso.animation = translate(this->_posX, 0.0f, 0.0f);
 }
 
+/**
+ * @brief Makes the body do a jump
+ * @param body The body to move (I only have one)
+ * @param currentTime The time (glfw_getTime)
+ * @param deltaTime The delta time to account for lags
+ */
 void	Animation::jump(Body &body, float currentTime, float deltaTime)
 {
 	float t = currentTime - _startTime;

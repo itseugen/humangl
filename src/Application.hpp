@@ -4,6 +4,9 @@
 #include "mymath.hpp"
 #include "Animation.hpp"
 
+/**
+ * @brief The main struct of the project containing everything necesary to open a window and display a figure
+ */
 struct Application
 {
 	

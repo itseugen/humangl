@@ -6,6 +6,9 @@
 struct BodyPart;
 struct Body;
 
+/**
+ * @brief A class to handle all the animations and their related functions
+ */
 class Animation
 {
 	public:
